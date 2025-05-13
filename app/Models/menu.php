@@ -5,10 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    protected $table = 'menu';
+     protected $table = 'menu'; // Sesuai nama tabel di DB
 
-    protected $fillable = ['nama', 'kategori', 'harga', 'deskripsi', 'gambar', 'tersedia'];
-
+    protected $fillable = [
+        'nama',
+        'kategori',
+        'harga',
+        'deskripsi',
+        'gambar',
+        'tersedia',
+    ];
     public function pesananItem()
     {
         return $this->hasMany(PesananItem::class);
