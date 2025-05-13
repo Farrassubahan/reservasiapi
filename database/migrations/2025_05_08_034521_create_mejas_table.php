@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('meja', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
+            $table->string('nomor');
             $table->string('area');
-            $table->integer('kapasitas');
+            $table->integer('kapasitas'); 
             $table->enum('status', ['tersedia', 'dipesan', 'digunakan'])->default('tersedia');
             $table->timestamps(); 
         });

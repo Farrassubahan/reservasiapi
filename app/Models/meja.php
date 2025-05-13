@@ -8,7 +8,7 @@ class Meja extends Model
 {
     protected $table = 'meja'; 
 
-    protected $fillable = ['nama', 'area', 'kapasitas', 'status'];
+    protected $fillable = ['nomor', 'area', 'kapasitas', 'status'];
 
     public function reservasi()
     {
