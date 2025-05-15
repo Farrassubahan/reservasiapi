@@ -15,7 +15,7 @@ class Menu extends Model
         'deskripsi',
         'gambar',
         'tersedia',
-    ];
+    ]; 
     public function pesanan()
     {
         return $this->hasMany(Pesanan::class, 'menu_id');
