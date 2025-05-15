@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +9,14 @@ class Pesanan extends Model
 {
     protected $table = 'pesanan';
 
-    protected $fillable = ['pengguna_id', 'reservasi_id', 'status'];
+    protected $fillable = [
+        'pengguna_id',
+        'reservasi_id',
+        'status',
+        'menu_id',
+        'jumlah',
+        'catatan',
+    ];
 
     public function pengguna()
     {
@@ -16,19 +24,17 @@ class Pesanan extends Model
     }
 
     public function reservasi()
-    {
+    { 
         return $this->belongsTo(Reservasi::class, 'reservasi_id');
     }
 
-    public function pesananItem()
+    public function menu()
     {
-        return $this->hasMany(Pesanan_Item::class);
+        return $this->belongsTo(Menu::class, 'menu_id');
     }
-
+    
     public function pembayaran()
     {
         return $this->hasOne(Pembayaran::class);
     }
 }
-
- 

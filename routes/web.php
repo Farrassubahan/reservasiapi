@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Koki\DapurController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+Route::middleware(['auth', 'role:koki'])->group(function () {
+    Route::get('/koki/dapur', [DapurController::class, 'index'])->name('koki.dapur');
+    Route::patch('/koki/dapur/{id}', [DapurController::class, 'updateStatus'])->name('koki.dapur.updateStatus');
 });

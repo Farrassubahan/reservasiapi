@@ -16,13 +16,13 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = $request->validate([ 
             'nama' => 'required|string|max:255',
             'kategori' => 'required|in:makanan,minuman',
             'harga' => 'required|numeric',
             'deskripsi' => 'nullable|string',
             'gambar' => 'nullable|string',
-            'tersedia' => 'required|in:tersedia,penuh',
+            'tersedia' => 'required|in:tersedia,kosong',
         ]);
 
         $menu = Menu::create($validated);
@@ -55,7 +55,7 @@ class MenuController extends Controller
             'harga' => 'required|numeric',
             'deskripsi' => 'nullable|string',
             'gambar' => 'nullable|string',
-            'tersedia' => 'required|in:tersedia,penuh',
+            'tersedia' => 'required|in:tersedia,kosong',
         ]);
 
         $menu->update($validated);

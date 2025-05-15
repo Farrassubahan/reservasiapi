@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations. 
      */
     public function up(): void
     {
@@ -16,10 +16,13 @@ return new class extends Migration
             $table->foreignId('pengguna_id')->constrained('pengguna')->onDelete('cascade');
             $table->foreignId('reservasi_id')->nullable()->constrained('reservasi')->onDelete('set null');
             $table->enum('status', ['menunggu', 'diproses', 'siap', 'disajikan', 'dibatalkan'])->default('menunggu');
+            $table->foreignId('menu_id')->constrained('menu')->onDelete('cascade');
+            $table->integer('jumlah');
+            $table->text('catatan')->nullable();
             $table->timestamps();
         });
-        
-    } 
+    }
+
 
     /**
      * Reverse the migrations.

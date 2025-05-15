@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-     protected $table = 'menu'; // Sesuai nama tabel di DB
+    protected $table = 'menu'; // Sesuai nama tabel di DB
 
     protected $fillable = [
         'nama',
@@ -15,8 +16,8 @@ class Menu extends Model
         'gambar',
         'tersedia',
     ];
-    public function pesananItem()
+    public function pesanan()
     {
-        return $this->hasMany(PesananItem::class);
+        return $this->hasMany(Pesanan::class, 'menu_id');
     }
 }

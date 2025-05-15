@@ -9,7 +9,7 @@
  
      protected $fillable = ['pesanan_id', 'metode', 'bukti', 'status'];
  
-     public function pesanan()
+     public function pesanan() 
      {
          return $this->belongsTo(Pesanan::class, 'pesanan_id');
      }
