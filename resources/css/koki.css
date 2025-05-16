@@ -121,3 +121,13 @@ select {
 select:hover {
   background-color: #e9e9e9;
 }
+
+ select, button {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+    margin-left: 4px;
+    border-radius: 4px;
+  }
+  button {
+    cursor: pointer;
+  }
