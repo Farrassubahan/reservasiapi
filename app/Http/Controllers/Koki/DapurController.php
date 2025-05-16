@@ -11,15 +11,11 @@ class DapurController extends Controller
     public function index()
     {
         $pesanan = Pesanan::with('menu')
-            ->whereIn('status', ['menunggu', 'diproses'])
+            ->whereIn('status', ['menunggu', 'diproses','siap', 'disajikan'])
             ->orderBy('created_at')
             ->get();
 
-        return view('koki.dashboard', compact('pesanan'));
-        // return response()->json([
-        //     'message' => 'Daftar pesanan aktif',
-        //     'data' => $pesanan
-        // ]);
+        return view('koki_dashboard', compact('pesanan'));
     }
 
     public function updateStatus(Request $request, $id)
@@ -32,22 +28,6 @@ class DapurController extends Controller
         $pesanan->status = $validated['status'];
         $pesanan->save();
 
-        return response()->json(['message' => 'Status berhasil diperbarui', 'data' => $pesanan]);
+        return redirect()->route('koki.dashboard')->with('success', 'Status berhasil diperbarui');
     }
-
-    // public function updateStatus(Request $request, $id)
-    // {
-    //     $validated = $request->validate([
-    //         'status' => 'required|in:menunggu,diproses,siap,disajikan,dibatalkan'
-    //     ]);
-
-    //     $pesanan = Pesanan::findOrFail($id);
-    //     $pesanan->status = $validated['status'];
-    //     $pesanan->save();
-
-    //     return response()->json([
-    //         'message' => 'Status pesanan berhasil diperbarui',
-    //         'data' => $pesanan
-    //     ]);
-    // }
 }
