@@ -9,13 +9,21 @@ body {
   display: flex;
   height: 100vh;
 }
-
+.main {
+  margin-left: 18rem; /* sama dengan lebar sidebar */
+  padding: 1.5rem 2rem;
+}
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 18rem;
-  background-color: #4C85AA;
   height: 100vh;
-  padding-top: 20px;
+  background-color: #4C85AA;
   color: white;
+  padding: 20px 1rem;
+  overflow-y: auto;
+  z-index: 1000; /* supaya di atas konten lain */
 }
 
 .sidebar h2 {
@@ -152,4 +160,47 @@ select:hover {
 
 .sidebar form.logout-form button:hover {
   background: #444; /* atau warna hover yang kamu pakai di .sidebar a:hover */
+}
+.stat {
+  display: flex;
+  margin-top: 30px;
+  padding: 0 20px;
+  gap: 4rem;
+}
+
+.card-stat {
+  text-align: center;
+  background-color: #ecf0f1;
+  width: 25rem;
+  height: 20rem;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+#statusChart {
+    width: 290px !important;
+    height: 290px !important;
+    display: block;
+    margin: 0 auto;
+}
+.head {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: flex-end; /* supaya search di kanan */
+  padding-right: 1rem;
+}
+
+.head input[type="search"] {
+  width: 250px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.head input[type="search"]:focus {
+  border-color: #4C85AA;
+  box-shadow: 0 0 5px rgba(76, 133, 170, 0.6);
 }
