@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Koki\DapurController;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +18,19 @@ use App\Http\Controllers\Koki\DapurController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::middleware(['auth', 'role:koki'])->group(function () {
-    Route::get('/koki/dapur', [DapurController::class, 'index'])->name('koki.dapur');
-    Route::patch('/koki/dapur/{id}', [DapurController::class, 'updateStatus'])->name('koki.dapur.updateStatus');
-});
-Route::prefix('koki')->group(function () {
+// Route::middleware(['auth', 'role:koki'])->group(function () {
+//     Route::get('/koki/dapur', [DapurController::class, 'index'])->name('koki.dapur');
+//     Route::patch('/koki/dapur/{id}', [DapurController::class, 'updateStatus'])->name('koki.dapur.updateStatus');
+// });
+// Route::prefix('koki')->group(function () {
+//     Route::get('/', [DapurController::class, 'index'])->name('koki.dashboard');
+//     Route::put('/pesanan/{id}/status', [DapurController::class, 'updateStatus']);
+// });
+Route::middleware(['auth', 'role:Koki'])->prefix('koki')->group(function () {
     Route::get('/', [DapurController::class, 'index'])->name('koki.dashboard');
     Route::put('/pesanan/{id}/status', [DapurController::class, 'updateStatus']);
 });
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
