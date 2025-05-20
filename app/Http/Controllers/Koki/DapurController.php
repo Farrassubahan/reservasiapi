@@ -9,7 +9,7 @@ use App\Models\Pesanan;
 class DapurController extends Controller
 {
     public function index()
-    {
+    {  
         $pesanan = Pesanan::with('menu')
             ->whereIn('status', ['menunggu', 'diproses','siap', 'disajikan'])
             ->orderBy('created_at')

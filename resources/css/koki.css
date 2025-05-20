@@ -131,3 +131,25 @@ select:hover {
   button {
     cursor: pointer;
   }
+
+  .sidebar form.logout-form {
+  margin: 0; /* supaya tidak ada jarak */
+}
+
+.sidebar form.logout-form button {
+  display: block;
+  width: 100%;
+  padding: 15px 20px;
+  color: white;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit; /* supaya font sama dengan teks lain */
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.sidebar form.logout-form button:hover {
+  background: #444; /* atau warna hover yang kamu pakai di .sidebar a:hover */
+}

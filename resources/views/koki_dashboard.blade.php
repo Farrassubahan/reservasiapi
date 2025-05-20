@@ -15,6 +15,11 @@
         <h2></h2>
         <a href="#" class="active">Dashboard</a>
         <a href="#">Pesanan Masuk</a>
+         <form method="POST" action="{{ route('logout') }}" class="logout-form">
+            @csrf
+            <button type="submit">Logout</button>
+        </form>
+
     </div>
     <div class="main">
         <div class="content">
@@ -40,9 +45,11 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Nama Pelanggan</th>
                         <th>Menu</th>
                         <th>Porsi</th>
                         <th>Jam</th>
+                        <th>Catatan Custemer</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -51,9 +58,11 @@
                     @foreach ($pesanan->whereNotIn('status', ['disajikan', 'dibatalkan']) as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->pengguna->nama }}</td>
                             <td>{{ $item->menu->nama }}</td>
                             <td>{{ $item->jumlah }}</td>
                             <td>{{ $item->created_at->format('H:i') }}</td>
+                            <td>{{ $item->catatan }}</td>
                             <td id="status-{{ $item->id }}">{{ ucfirst($item->status) }}</td>
                             <td>
                                 <form action="{{ url('koki/pesanan/' . $item->id . '/status') }}" method="POST">
