@@ -18,6 +18,10 @@ use App\Http\Controllers\Auth\LoginController;
 Route::get('/', function () {
     return view('welcome');
 });
+use App\Http\Controllers\Admin\AdminController;
+
+Route::get('/admin', [AdminController::class, 'dashboard']);
+
 // Route::middleware(['auth', 'role:koki'])->group(function () {
 //     Route::get('/koki/dapur', [DapurController::class, 'index'])->name('koki.dapur');
 //     Route::patch('/koki/dapur/{id}', [DapurController::class, 'updateStatus'])->name('koki.dapur.updateStatus');
