@@ -1,5 +1,4 @@
 # /.phpunit.cache
-# /node_modules
 # /public/build
 # /public/hot
 # /public/storage
@@ -16,4 +15,4 @@
 # /.fleet
 # /.idea
 # /.vscode
-# node_modules
+/node_modules
