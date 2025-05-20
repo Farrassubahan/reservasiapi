@@ -8,7 +8,7 @@
     <title>Koki</title>
     @vite(['resources/css/koki.css', 'resources/js/app.js'])
 </head>
-
+ 
 <body>
 
     <div class="sidebar">
