@@ -12,6 +12,76 @@
 </head>
 
 <body>
+<div class="layout">
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <a class="active" href="#">Dashboard</a>
+    <a href="#">Reservasi</a>
+    <a href="#">Pelanggan</a>
+    <a href="#">Menu</a>
+    <a href="#">Meja</a>
+    <a href="#">Laporan</a>
+    <a href="#">Manajemen User</a>
+  </div>
+
+  <div class="main">
+    <div class="head">
+      <input type="search" placeholder="Search">
+    </div>
+    <div class="information">
+      <div class="card-info">
+        <h2>Reservasi Hari Ini</h2>
+        <h2>10</h2>
+      </div>
+      <div class="card-info">
+        <h2>Reservasi Hari Ini</h2>
+        <h2>10</h2>
+      </div>
+      <div class="card-info">
+        <h2>Reservasi Hari Ini</h2>
+        <h2>10</h2>
+      </div>
+    </div>
+    <div class="stat">
+      <div class="card-stat">
+        <h2>Reservasi</h2>
+        <canvas id="reservasiChart"></canvas>
+      </div>
+      <div class="card-stat">
+        <h2>Status Reservasi</h2>
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+    <h1 style="margin-top: 2rem">Daftar Reservasi Hari Ini</h1>
+    <div class="table-pesanan" style="margin: 2rem 0;">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Pelanggan</th>
+            <th>Tanggal & Waktu</th>
+            <th>Jumlah Orang</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hikaru</td>
+            <td>2023-01-01</td>
+            <td>2</td>
+            <td>Selesai</td>
+            <td>
+              <a href="#"><i class="fa-solid fa-trash"></i></a>
+              <a href="#"><i class="fa-solid fa-pencil"></i></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+=======
     <div class="sidebar">
         <h2></h2>
         <a href="#">Dashboard</a>

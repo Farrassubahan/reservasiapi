@@ -183,19 +183,33 @@ select:hover {
     display: block;
     margin: 0 auto;
 }
-.head {
-  margin-bottom: 1.5rem;
+.header {
   display: flex;
-  justify-content: flex-end; /* supaya search di kanan */
-  padding-right: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 5rem;
+  margin-top: 40px;
 }
-
-.head input[type="search"] {
-  width: 250px;
+.header input[type="search"] {
+  width: 350px;
+  height: 50px;
   padding: 8px 12px;
   font-size: 1rem;
-  border: 1.5px solid #ccc;
-  border-radius: 25px;
+  margin-left: 100px;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.header select{
+  width: 350px;
+  height: 50px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  margin-top: 10px;
   outline: none;
   transition: border-color 0.3s ease;
 }
@@ -204,3 +218,85 @@ select:hover {
   border-color: #4C85AA;
   box-shadow: 0 0 5px rgba(76, 133, 170, 0.6);
 }
+.content-reservasi {
+  width: 200%;
+  max-width: 1200px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+.header-row,
+.card-reservasi {
+  display: flex;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+}
+
+.header-row {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card-reservasi {
+  background-color: #fff;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Atur lebar per kolom agar konsisten */
+.col-name {
+  flex: 2;
+}
+.col-date {
+  flex: 2;
+}
+.col-people {
+  flex: 1.5;
+}
+.col-status {
+  flex: 1.2;
+}
+.col-action {
+  flex: 0.8;
+  text-align: center;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 8px 0;
+  border-radius: 6px;
+  z-index: 1;
+  min-width: 100px;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+
