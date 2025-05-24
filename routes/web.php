@@ -22,6 +22,12 @@ use App\Http\Controllers\Admin\AdminController;
 
 Route::get('/admin', [AdminController::class, 'dashboard']);
 
+// Admin reservasi
+Route::prefix('admin')->group(function () {
+    Route::put('/reservasi/{id}/edit', [AdminController::class, 'editReservasi'])->name('admin.reservasi.edit');
+    Route::delete('/reservasi/{id}', [AdminController::class, 'hapusReservasi'])->name('admin.reservasi.hapus');
+});
+
 // Route::middleware(['auth', 'role:koki'])->group(function () {
 //     Route::get('/koki/dapur', [DapurController::class, 'index'])->name('koki.dapur');
 //     Route::patch('/koki/dapur/{id}', [DapurController::class, 'updateStatus'])->name('koki.dapur.updateStatus');
