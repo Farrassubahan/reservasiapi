@@ -16,7 +16,7 @@ use App\Http\Controllers\Auth\LoginController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('admin_pelanggan');
 });
 // Route::middleware(['auth', 'role:koki'])->group(function () {
 //     Route::get('/koki/dapur', [DapurController::class, 'index'])->name('koki.dapur');

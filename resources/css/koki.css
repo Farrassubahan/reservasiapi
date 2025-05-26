@@ -9,13 +9,21 @@ body {
   display: flex;
   height: 100vh;
 }
-
+.main {
+  margin-left: 18rem; /* sama dengan lebar sidebar */
+  padding: 1.5rem 2rem;
+}
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 18rem;
-  background-color: #4C85AA;
   height: 100vh;
-  padding-top: 20px;
+  background-color: #4C85AA;
   color: white;
+  padding: 20px 1rem;
+  overflow-y: auto;
+  z-index: 1000; /* supaya di atas konten lain */
 }
 
 .sidebar h2 {
@@ -152,4 +160,148 @@ select:hover {
 
 .sidebar form.logout-form button:hover {
   background: #444; /* atau warna hover yang kamu pakai di .sidebar a:hover */
+}
+.stat {
+  display: flex;
+  margin-top: 30px;
+  padding: 0 20px;
+  gap: 4rem;
+}
+
+.card-stat {
+  text-align: center;
+  background-color: #ecf0f1;
+  width: 25rem;
+  height: 20rem;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+#statusChart {
+    width: 290px !important;
+    height: 290px !important;
+    display: block;
+    margin: 0 auto;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 5rem;
+  margin-top: 40px;
+}
+.header input[type="search"] {
+  width: 350px;
+  height: 50px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-left: 100px;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.header select{
+  width: 350px;
+  height: 50px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  margin-top: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.head input[type="search"]:focus {
+  border-color: #4C85AA;
+  box-shadow: 0 0 5px rgba(76, 133, 170, 0.6);
+}
+.content-reservasi {
+  width: 200%;
+  max-width: 1200px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+.header-row,
+.card-reservasi {
+  display: flex;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+}
+
+.header-row {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card-reservasi {
+  background-color: #fff;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Atur lebar per kolom agar konsisten */
+.col-name {
+  flex: 2;
+}
+.col-date {
+  flex: 2;
+}
+.col-people {
+  flex: 1.5;
+}
+.col-status {
+  flex: 1.2;
+}
+.col-action {
+  flex: 0.8;
+  text-align: center;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 8px 0;
+  border-radius: 6px;
+  z-index: 1;
+  min-width: 100px;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+.col-total {
+  flex: 0.5;
+}
+.col-no{
+  flex: 0.5
 }
