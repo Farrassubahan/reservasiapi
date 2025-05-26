@@ -16,7 +16,7 @@ use App\Http\Controllers\Auth\LoginController;
 */
 
 Route::get('/', function () {
-    return view('admin_reservasi');
+    return view('admin_pelanggan');
 });
 use App\Http\Controllers\Admin\AdminController;
 
