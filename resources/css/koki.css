@@ -308,3 +308,240 @@ select:hover {
 .col-no{
   flex: 0.5
 }
+.header-row-menu {
+  font-weight: bold;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.content-menu {
+  width: 200%;
+  max-width: 1200px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+.header-row-menu,
+.card-menu {
+  display: flex;
+  padding: 12px 16px;
+}
+.header-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+}
+.data-menu {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 10rem;
+  white-space: nowrap;
+}
+.tambah-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5D58F2;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  margin-left: 40rem;
+}
+.card-menu {
+  background-color: #EAEAEA47;
+  margin-top: 1rem;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  display: flex;
+  align-items: center;
+  border-color: #000000;
+  border-width: 2px;
+  border-style: solid;
+}
+.gambar-seragam {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.col-gambar{
+  flex:1;
+}
+.col-name-menu{
+  flex:2;
+}
+.col-harga{
+  flex:2;
+}
+.col-kategori{
+  flex:3;
+}
+.col-stok{
+  flex:2;
+}
+.col-action{
+  flex:0.8;
+  text-align: center;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.modal-content {
+  background-color: #f2f2f2;
+  margin: 6% auto;
+  padding: 30px 37px;
+  border-radius: 13px;
+  width: 540px;              /* 1.5x dari 360px */
+  max-width: 95%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  position: relative;
+  font-size: 1.1rem;         /* font base diperbesar */
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 1.95rem;        /* judul diperbesar */
+  text-align: center;
+  color: #333;
+}
+
+.modal-content label {
+  font-weight: 600;
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  color: #444;
+  font-size: 1.1rem;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content select {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1.4px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  background-color: white;
+  height: 42px;
+}
+
+.horizontal-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.horizontal-group .form-group {
+  flex: 1;
+}
+
+.image-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.image-preview {
+  width: 105px;              /* 1.5x dari 70px */
+  height: 105px;
+  background-color: #e0e0e0;
+  border: 2.5px dashed #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.image-preview:hover {
+  border-color: #5D58F2;
+}
+
+.image-preview span {
+  font-size: 0.95rem;
+  color: #666;
+  text-align: center;
+  padding: 5px;
+}
+
+.image-preview img.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pilih-gambar-text {
+  font-size: 1.05rem;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+  padding: 5px 8px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 28px;
+}
+
+.modal-content button {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.05rem;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"] {
+  background-color: #5D58F2;
+  color: white;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #4a45c7;
+}
+
+.modal-content button#batalBtn {
+  background-color: #ddd;
+  color: #333;
+}
+
+.modal-content button#batalBtn:hover {
+  background-color: #bbb;
+}
+
+.close-button {
+  position: absolute;
+  top: 13px;
+  right: 18px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.3s;
+}
+
+.close-button:hover {
+  color: #444;
+}
