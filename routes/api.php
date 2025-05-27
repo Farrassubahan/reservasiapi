@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\MenuController;
 
 
 Route::middleware('throttle:10,1')->group(function () {
-
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle']);

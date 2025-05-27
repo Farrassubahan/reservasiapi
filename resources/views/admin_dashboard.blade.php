@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,76 +12,6 @@
 </head>
 
 <body>
-<div class="layout">
-  <div class="sidebar">
-    <h2>Menu</h2>
-    <a class="active" href="#">Dashboard</a>
-    <a href="#">Reservasi</a>
-    <a href="#">Pelanggan</a>
-    <a href="#">Menu</a>
-    <a href="#">Meja</a>
-    <a href="#">Laporan</a>
-    <a href="#">Manajemen User</a>
-  </div>
-
-  <div class="main">
-    <div class="head">
-      <input type="search" placeholder="Search">
-    </div>
-    <div class="information">
-      <div class="card-info">
-        <h2>Reservasi Hari Ini</h2>
-        <h2>10</h2>
-      </div>
-      <div class="card-info">
-        <h2>Reservasi Hari Ini</h2>
-        <h2>10</h2>
-      </div>
-      <div class="card-info">
-        <h2>Reservasi Hari Ini</h2>
-        <h2>10</h2>
-      </div>
-    </div>
-    <div class="stat">
-      <div class="card-stat">
-        <h2>Reservasi</h2>
-        <canvas id="reservasiChart"></canvas>
-      </div>
-      <div class="card-stat">
-        <h2>Status Reservasi</h2>
-        <canvas id="statusChart"></canvas>
-      </div>
-    </div>
-    <h1 style="margin-top: 2rem">Daftar Reservasi Hari Ini</h1>
-    <div class="table-pesanan" style="margin: 2rem 0;">
-      <table>
-        <thead>
-          <tr>
-            <th>Nama Pelanggan</th>
-            <th>Tanggal & Waktu</th>
-            <th>Jumlah Orang</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Hikaru</td>
-            <td>2023-01-01</td>
-            <td>2</td>
-            <td>Selesai</td>
-            <td>
-              <a href="#"><i class="fa-solid fa-trash"></i></a>
-              <a href="#"><i class="fa-solid fa-pencil"></i></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-=======
     <div class="sidebar">
         <h2></h2>
         <a href="#">Dashboard</a>
@@ -134,8 +64,7 @@
                         <th>Tanggal</th>
                         <th>Jumlah Orang</th>
                         <th>Status</th>
-                        <th>Dibuat</th>
-                        <th>Diperbarui</th>
+                       
                         <th>Aksi</th>
 
                     </tr>
@@ -143,19 +72,17 @@
                 <tbody>
                     @forelse ($dataReservasiHariIniLengkap as $reservasi)
                         <tr>
-                            <td>{{ $reservasi->kode_reservasi }}</td>
                             <td>{{ $reservasi->pengguna->nama }}</td>
+                            <td>{{ $reservasi->kode_reservasi }}</td>
                             <td>{{ $reservasi->sesi }}</td>
                             <td>{{ $reservasi->tanggal }}</td>
                             <td>{{ $reservasi->jumlah_tamu }}</td>
                             <td>{{ ucfirst($reservasi->status) }}</td>
-                            <td>{{ $reservasi->created_at }}</td>
-                            <td>{{ $reservasi->updated_at }}</td>
                             <td>
                                 <!-- Hapus -->
                                 <form action="{{ route('admin.reservasi.hapus', $reservasi->id) }}" method="POST"
                                     style="display: inline;">
-                                    @csrf
+                                    @csrf 
                                     @method('DELETE')
                                     <button type="submit"
                                         onclick="return confirm('Yakin ingin menghapus reservasi ini?')"
@@ -172,7 +99,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" style="text-align: center;">Tidak ada reservasi hari ini</td>
+                            <td colspan="9" style="text-align: center;">Tidak ada reservasi hari ini</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -183,7 +110,7 @@
     <script>
         // Chart 1: Reservasi
         const reservasiCtx = document.getElementById('reservasiChart').getContext('2d');
-        new Chart(reservasiCtx, {
+        new Chart(reservasiCtx, { 
             type: 'bar',
             data: {
                 labels: {!! json_encode($labels) !!}, // ['Jan', 'Feb', ...]

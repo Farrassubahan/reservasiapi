@@ -252,6 +252,9 @@ select:hover {
 .col-date {
   flex: 2;
 }
+.col-codereservasi {
+  flex: 2;
+}
 .col-people {
   flex: 1.5;
 }

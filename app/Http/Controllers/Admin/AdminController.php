@@ -9,9 +9,9 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard() 
     {
-        // Grafik per bulan
+        // Grafik per bulan 
         $labels = [];
         $data = [];
         for ($i = 1; $i <= 12; $i++) {

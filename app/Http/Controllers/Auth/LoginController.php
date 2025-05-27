@@ -34,7 +34,7 @@ class LoginController extends Controller
         $role = strtolower($user->role);
 
         if ($role === 'koki') {
-            return redirect()->route('koki.dashboard');
+            return redirect()->route('koki.dashboard'); 
         } elseif ($role === 'Pelayan') {
             return redirect()->route('pelayan.dashboard');
         } elseif ($role === 'Admin') {

@@ -14,8 +14,8 @@
     <div class="sidebar">
         <h2></h2>
         <a href="#" class="active">Dashboard</a>
-        <a href="#">Pesanan Masuk</a>
-         <form method="POST" action="{{ route('logout') }}" class="logout-form">
+        <a href="{{ route('koki.pesanan') }}">Pesanan Masuk</a>
+        <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
             <button type="submit">Logout</button>
         </form>
@@ -50,8 +50,8 @@
                         <th>Porsi</th>
                         <th>Jam</th>
                         <th>Catatan Custemer</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        {{-- <th>Status</th>
+                        <th>Aksi</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +63,7 @@
                             <td>{{ $item->jumlah }}</td>
                             <td>{{ $item->created_at->format('H:i') }}</td>
                             <td>{{ $item->catatan }}</td>
-                            <td id="status-{{ $item->id }}">{{ ucfirst($item->status) }}</td>
+                            {{-- <td id="status-{{ $item->id }}">{{ ucfirst($item->status) }}</td>
                             <td>
                                 <form action="{{ url('koki/pesanan/' . $item->id . '/status') }}" method="POST">
                                     @csrf
@@ -82,7 +82,7 @@
                                     </select>
                                     <button type="submit" style="font-size: 12px; padding: 3px 6px;">Update</button>
                                 </form>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
 
