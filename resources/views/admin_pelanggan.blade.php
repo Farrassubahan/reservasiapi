@@ -41,7 +41,7 @@
             <h2 class="col-no">No</h2>
             <h2 class="col-name">Nama Pelanggan</h2>
             <h2 class="col-status">No Hp</h2>
-            <h2 class="col-people">Jumlah Reservasi</h2>
+            <h2 class="col-people">Jumlah Reservasi</h2> 
             <h2 class="col-date">Terakhir Reservasi</h2>
             <h2 class="col-action">Aksi</h2>
         </div>
