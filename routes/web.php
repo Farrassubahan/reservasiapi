@@ -20,7 +20,7 @@ use App\Http\Controllers\Admin\ReservasiController;
 
 
 Route::get('/', function () {
-    return view('admin_reservasi');
+    return view('admin_pelanggan');
 });
 
 // Admin reservasi
