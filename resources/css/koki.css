@@ -377,15 +377,33 @@ select:hover {
 .col-name-menu{
   flex:2;
 }
+.col-deskripsi{
+  flex:1;
+}
 .col-harga{
   flex:2;
 }
 .col-kategori{
   flex:3;
 }
-.col-stok{
-  flex:2;
+.col-stok {
+  flex: 1;
+  display: flex;
+  align-items: center;
+   margin-left: 5rem; 
 }
+
+.col-stok select {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  appearance: none;
+  cursor: pointer;
+}
+
 .col-action{
   flex:0.8;
   text-align: center;
