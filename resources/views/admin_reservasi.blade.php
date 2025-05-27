@@ -16,10 +16,10 @@
     <div class="layout">
         <div class="sidebar">
             <h2>Menu</h2>
-            <a href="#">Dashboard</a>
-            <a class="active" href="#">Reservasi</a>
-            <a href="#">Pelanggan</a>
-            <a href="#">Menu</a>
+            <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+            <a class="active" href="{{ route('reservasi.index') }}">Reservasi</a>
+            <a href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
+            <a  href="{{ route('menu.index') }}">Menu</a>
             <a href="#">Meja</a>
             <a href="#">Laporan</a>
             <a href="#">Manajemen User</a>
