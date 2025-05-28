@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\ReservasiController;
 
 // Default route
 Route::get('/', function () {
-    return view('welcome');
+    return view('admin_laporan');
 });
 
 // Auth routes
