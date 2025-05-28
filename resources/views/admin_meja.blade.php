@@ -7,12 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Admin</title>
+    <title>Admin Meja</title>
     @vite(['resources/css/koki.css', 'resources/js/app.js'])
 </head>
-
 <body>
     <div class="layout">
         <div class="sidebar">
@@ -21,24 +19,36 @@
             <a href="{{ route('reservasi.index') }}">Reservasi</a>
             <a href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
             <a href="{{ route('menu.index') }}">Menu</a>
-            <a class="active"href="#">Meja</a>
+            <a class="active" href="{{ route('meja.index') }}">Meja</a>
             <a href="#">Laporan</a>
             <a href="#">Manajemen User</a>
         </div>
         <div class="header" style="justify-content: center !important;">
-            <div>
-                <input type="search" name="search" placeholder="Search" value="{{ request('search') }}">
-            </div>
-            <div>
-                <select>
-                    <option value="" disabled selected hidden>Terbuka</option>
-                    <option value="selesai">Tersedia</option>
-                    <option value="dimasak">Dipesan</option>
-                    <option value="dimasak">Digunakan</option>
+            <form method="GET" action="{{ route('meja.index') }}">
+                <input type="search" name="search" placeholder="Search nomor meja" value="{{ request('search') }}">
+            </form>
+            <form method="GET" action="{{ url('/admin/meja') }}" id="formFilter">
+                <select name="status" onchange="document.getElementById('formFilter').submit()">
+                    <option value="" {{ request('status') == null ? 'selected' : '' }}>Semua Status</option>
+                    <option value="tersedia" {{ request('status') == 'tersedia' ? 'selected' : '' }}>Tersedia</option>
+                    <option value="dipesan" {{ request('status') == 'dipesan' ? 'selected' : '' }}>Dipesan</option>
+                    <option value="digunakan" {{ request('status') == 'digunakan' ? 'selected' : '' }}>Digunakan
+                    </option>
                 </select>
-            </div>
+            </form>
         </div>
         <div class="main">
+            @if (session('success'))
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: '{{ session('success') }}',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                </script>
+            @endif
             <div class="header-menu">
                 <div class="data-menu">Daftar Meja</div>
                 <button class="tambah-menu" id="tambahMenuBtn">Tambah Meja</button>
@@ -52,58 +62,63 @@
                     <h2 class="col-Deskripsi">Jumlah Orang</h2>
                     <h2 class="col-action">Aksi</h2>
                 </div>
-                <!-- Contoh data statis, ganti/duplikat sesuai kebutuhan -->
-                <div class="card-menu" style="text-align: center">
-                    <div class="col-gambar">1</div>
-                    <div class="col-name-menu">2 orang</div>
-                    <div class="col-harga">Kosong</div>
-                    <div class="col-kategori">Hikanjut</div>
-                    <div class="col-deskripsi">2 orang</div>
-                    <div class="col-action">
-                        <button class="btn-hapus"><i class="fa-solid fa-trash text-red-600"></i></button>
-                        <a href="#" class="btn-edit"><i class="fa-solid fa-pencil text-blue-600"></i></a>
+                @foreach ($mejas as $meja)
+                    @php
+                        $reservasiMenunggu = $meja->reservasi->firstWhere('status', 'menunggu');
+                        $fallbackReservasi = $meja->reservasi->sortByDesc('created_at')->first();
+                        $reservasiAktif = $reservasiMenunggu ?? $fallbackReservasi;
+                    @endphp
+                    <div class="card-menu" style="text-align: center">
+                        <div class="col-gambar">{{ $meja->nomor }}</div>
+                        <div class="col-name-menu">{{ $meja->kapasitas }} orang</div>
+                        <div class="col-harga">{{ ucfirst($meja->status) }}</div>
+                        <div class="col-kategori">
+                            {{ $reservasiAktif && $reservasiAktif->pengguna ? $reservasiAktif->pengguna->nama : '-' }}
+                        </div>
+                        <div class="col-deskripsi">
+                            {{ $reservasiAktif ? $reservasiAktif->jumlah_tamu : '-' }} orang
+                        </div>
+                        <div class="col-action">
+                            <form action="{{ route('meja.destroy', $meja->id) }}" method="POST" class="form-hapus"
+                                style="display:inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-hapus" data-id="{{ $meja->id }}">
+                                    <i class="fa-solid fa-trash text-red-600"></i>
+                                </button>
+                            </form>
+
+                            <button type="button" class="btn-edit" data-id="{{ $meja->id }}">
+                                <i class="fa-solid fa-pen text-blue-600"></i>
+                            </button>
+
+                        </div>
                     </div>
-                </div>
-
-
-                {{-- Modal Create Menu --}}
+                @endforeach
+                {{-- Modal Create Meja --}}
                 <div class="modal" id="formModal">
                     <div class="modal-content">
                         <span class="close-button" onclick="tutupForm()">&times;</span>
                         <h2>Tambah Menu</h2>
 
-                        <form id="menuForm">
-                            <label for="nama">Nama Menu</label>
-                            <input type="text" id="nama" name="nama" required>
+                        <form id="mejaForm">
+                            <label for="nomor">Nomor Meja</label>
+                            <input type="text" id="nomor" name="nomor" required>
 
-                            <label for="harga">Harga</label>
-                            <input type="number" id="harga" name="harga" required>
+                            <label for="area">Area</label>
+                            <input type="text" id="area" name="area" required>
 
-                            <label for="kategori">Kategori</label>
-                            <select id="kategori" name="kategori" required style="width: 29rem; height: 3rem;">
-                                <option value="">Pilih Kategori</option>
-                                <option value="makanan">Makanan</option>
-                                <option value="minuman">Minuman</option>
+                            <label for="kapasitas">Kapasitas</label>
+                            <input type="number" id="kapasitas" name="kapasitas" required>
+
+                            <label for="status">Status</label>
+                            <select id="status" name="status" required>
+                                <option value="">Pilih Status</option>
+                                <option value="tersedia">Tersedia</option>
+                                <option value="dipesan">Dipesan</option>
+                                <option value="digunakan">Digunakan</option>
                             </select>
-                            <label for="deskripsi">Deskripsi</label>
-                            <textarea id="deskripsi" name="deskripsi" rows="4" required style="width: 100%;"></textarea>
-                            <div class="horizontal-group">
-                                <div class="form-group">
-                                    <label for="gambar">Gambar</label>
-                                    <div class="image-upload-row">
-                                        <div class="image-preview" id="imagePreview"
-                                            onclick="document.getElementById('gambar').click()">
-                                            <span>Pratinjau</span>
-                                            <img src="" alt="Preview" class="preview-img"
-                                                style="display: none;">
-                                        </div>
-                                        <span class="pilih-gambar-text"
-                                            onclick="document.getElementById('gambar').click()">Pilih Gambar</span>
-                                        <input type="file" id="gambar" name="gambar" accept="image/*"
-                                            onchange="previewGambar(this)" style="display: none;">
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="button-group">
                                 <button type="button" id="batalBtn" onclick="tutupForm()">Batal</button>
                                 <button type="submit">Simpan</button>
@@ -111,110 +126,211 @@
                         </form>
                     </div>
                 </div>
-            </div>
+                {{-- modal edit --}}
+                <div class="modal" id="editModal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close-button" onclick="tutupEditForm()">&times;</span>
+                        <h2>Edit Meja</h2>
 
+                        <form id="editMejaForm">
+                            <input type="hidden" id="edit_id" name="id">
 
-            {{-- Modal buat Edit Menu --}}
-            <div class="modal" id="editModal" style="display:none;">
-                <div class="modal-content">
-                    <span class="close-button" onclick="tutupEditForm()">&times;</span>
-                    <h2>Edit Menu</h2>
+                            <label for="edit_nomor">Nomor Meja</label>
+                            <input type="text" id="edit_nomor" name="nomor" required>
 
-                    <form id="menuEditForm" enctype="multipart/form-data">
-                        <input type="hidden" id="edit_menu_id" name="menu_id">
-                        <input type="hidden" name="_method" value="PUT">
+                            <label for="edit_area">Area</label>
+                            <input type="text" id="edit_area" name="area" required>
 
-                        <label for="edit_nama">Nama Menu</label>
-                        <input type="text" id="edit_nama" name="nama" required>
+                            <label for="edit_kapasitas">Kapasitas</label>
+                            <input type="number" id="edit_kapasitas" name="kapasitas" required>
 
-                        <label for="edit_harga">Harga</label>
-                        <input type="number" id="edit_harga" name="harga" required>
-
-                        <label for="edit_kategori">Kategori</label>
-                        <select id="edit_kategori" name="kategori" required style="width: 29rem; height: 3rem;">
-                            <option value="">Pilih Kategori</option>
-                            <option value="makanan">Makanan</option>
-                            <option value="minuman">Minuman</option>
-                        </select>
-
-                        <label for="edit_deskripsi">Deskripsi</label>
-                        <textarea id="edit_deskripsi" name="deskripsi" required rows="4" style="resize: vertical; width: 100%;"></textarea>
-
-                        <div class="horizontal-group">
-                            <div class="form-group">
-                                <label for="edit_gambar">Gambar</label>
-                                <div class="image-upload-row">
-                                    <div class="image-preview" id="editImagePreview"
-                                        onclick="document.getElementById('edit_gambar').click()">
-                                        <span>Pratinjau</span>
-                                        <img src="" alt="Preview" class="preview-img"
-                                            style="display: none;">
-                                    </div>
-                                    <span class="pilih-gambar-text"
-                                        onclick="document.getElementById('edit_gambar').click()">Pilih Gambar</span>
-                                    <input type="file" id="edit_gambar" name="gambar" accept="image/*"
-                                        onchange="previewEditGambar(this)" style="display: none;">
-                                </div>
+                            <label for="edit_status">Status</label>
+                            <select id="edit_status" name="status" required>
+                                <option value="">Pilih Status</option>
+                                <option value="tersedia">Tersedia</option>
+                                <option value="dipesan">Dipesan</option>
+                                <option value="digunakan">Digunakan</option>
+                            </select>
+                            <div class="button-group">
+                                <button type="button" onclick="tutupEditForm()">Batal</button>
+                                <button type="submit">Simpan Perubahan</button>
                             </div>
-                        </div>
-
-                        <div class="button-group">
-                            <button type="button" id="batalEditBtn" onclick="tutupEditForm()">Batal</button>
-                            <button type="submit">Simpan</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-
             {{-- script buat create --}}
             <script>
                 const modal = document.getElementById("formModal");
                 const tambahBtn = document.getElementById("tambahMenuBtn");
 
-                // Tampilkan form saat tombol tambah ditekan
                 tambahBtn.addEventListener("click", function() {
                     modal.style.display = "block";
                 });
 
-                // Fungsi untuk menutup modal
                 function tutupForm() {
                     modal.style.display = "none";
-                    document.getElementById("menuForm").reset(); // Reset form jika diperlukan
+                    document.getElementById("mejaForm").reset();
                 }
 
-                // Tutup modal jika user klik di luar area konten
-                window.addEventListener("click", function(event) {
-                    if (event.target === modal) {
-                        tutupForm();
-                    }
+                document.getElementById('mejaForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const form = e.target;
+                    const data = new FormData(form);
+
+                    fetch("{{ route('meja.store') }}", {
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                // hapus 'Accept': 'application/json',
+                            },
+                            body: data
+                        })
+                        .then(async response => {
+                            let resData = await response.json();
+
+                            if (!response.ok) {
+                                return Promise.reject(resData);
+                            }
+                            return resData;
+                        })
+                        .then(data => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses',
+                                text: data.message || 'Meja berhasil ditambahkan',
+                                timer: 2000,
+                                showConfirmButton: false,
+                            });
+                            tutupForm();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2100);
+                        })
+                        .catch(error => {
+                            if (error.errors) {
+                                const messages = Object.values(error.errors).flat().join('<br>');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    html: messages,
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: error.message || 'Terjadi kesalahan.',
+                                });
+                            }
+                        });
+                });
+            </script>
+            {{-- script buat edit brow --}}
+            <script>
+                const editModal = document.getElementById("editModal");
+
+                function tutupEditForm() {
+                    editModal.style.display = "none";
+                }
+
+                document.querySelectorAll('.btn-edit').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        fetch(/admin/meja/${id})
+                            .then(res => {
+                                if (!res.ok) throw new Error('Gagal mengambil data');
+                                return res.json();
+                            })
+                            .then(data => {
+                                document.getElementById('edit_id').value = data.id;
+                                document.getElementById('edit_nomor').value = data.nomor;
+                                document.getElementById('edit_area').value = data.area;
+                                document.getElementById('edit_kapasitas').value = data.kapasitas;
+                                document.getElementById('edit_status').value = data.status;
+                                editModal.style.display = "block";
+                            })
+                            .catch(err => {
+                                alert('Gagal memuat data meja: ' + err.message);
+                            });
+                    });
                 });
 
-                // nampilin prtinjau gambar
-                function previewGambar(input) {
-                    const file = input.files[0];
-                    const previewContainer = document.getElementById('imagePreview');
-                    const imgElement = previewContainer.querySelector('.preview-img');
-                    const textElement = previewContainer.querySelector('span');
+                document.getElementById('editMejaForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            imgElement.src = e.target.result;
-                            imgElement.style.display = 'block';
-                            textElement.style.display = 'none';
-                        }
-                        reader.readAsDataURL(file);
-                    } else {
-                        imgElement.src = '';
-                        imgElement.style.display = 'none';
-                        textElement.style.display = 'block';
-                    }
-                }
-</script>
+                    const id = document.getElementById('edit_id').value;
+                    const formData = new FormData(this);
 
+                    fetch(/admin/meja/${id}, {
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json',
+                                'X-HTTP-Method-Override': 'PUT',
+                            },
+                            body: formData
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => Promise.reject(err));
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: data.message || 'Data meja berhasil diperbarui',
+                                timer: 2000,
+                                showConfirmButton: false,
+                            });
+                            tutupEditForm();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2100);
+                        })
+                        .catch(error => {
+                            if (error.errors) {
+                                const messages = Object.values(error.errors).flat().join('<br>');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    html: messages,
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: 'Terjadi kesalahan.',
+                                });
+                            }
+                        });
+                });
+            </script>
 
-
+            {{-- allert hapus --}}
+            <script>
+                document.querySelectorAll('.form-hapus').forEach(form => {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: 'Yakin ingin menghapus?',
+                            text: "Data meja akan dihapus permanen.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#aaa',
+                            confirmButtonText: 'Ya, hapus!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
-
 </html>

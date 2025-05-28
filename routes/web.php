@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\MejaController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Koki\DapurController;
@@ -56,6 +57,12 @@ Route::prefix('admin')->group(function () {
     Route::delete('/menu/{id}', [MenuController::class, 'destroy'])->name('menu.destroy');
     Route::put('/admin/menu/{id}/ubah-stok', [MenuController::class, 'ubahStok'])->name('menu.ubah-stok');
 
+    // admin meja
+    Route::get('/meja', [MejaController::class, 'index'])->name('meja.index');
+    Route::post('/meja', [MejaController::class, 'store'])->name('meja.store');
+    Route::get('/meja/{id}', [MejaController::class, 'show'])->name('meja.show');
+    Route::put('/meja/{id}', [MejaController::class, 'update'])->name('meja.update');
+    Route::delete('/meja/{id}', [MejaController::class, 'destroy'])->name('meja.destroy');
 });
 
 // Koki routes
