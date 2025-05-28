@@ -1,16 +1,5 @@
 <?php
 
-// namespace App\Http\Controllers\Admin;
-
-// use App\Http\Controllers\Controller;
-// use Illuminate\Http\Request;
- 
-// class MejaController extends Controller
-// {
-//     //
-// }
-
-// app/Http/Controllers/Admin/MejaController.php
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Meja;
@@ -19,17 +8,27 @@ use App\Http\Controllers\Controller;
 
 class MejaController extends Controller
 {
-    // Menampilkan semua meja
-    public function index()
+    public function index(Request $request)
     {
-        $mejas = Meja::all();
-        return response()->json($mejas);
+        $query = Meja::with(['reservasi.pengguna']);
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('nomor', 'like', "%{$search}%");
+        }
+
+        $mejas = $query->get();
+
+        return view('admin_meja', compact('mejas'));
     }
 
-    // Menambahkan meja baru
+
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'nomor' => 'required|unique:meja',
             'area' => 'required|string',
@@ -37,33 +36,22 @@ class MejaController extends Controller
             'status' => 'required|in:tersedia,dipesan,digunakan',
         ]);
 
-        // Membuat meja baru
-        $meja = Meja::create([
-            'nomor' => $request->nomor,
-            'area' => $request->area,
-            'kapasitas' => $request->kapasitas,
-            'status' => $request->status,
-        ]);
+        Meja::create($request->only('nomor', 'area', 'kapasitas', 'status'));
 
-        return response()->json([
-            'message' => 'Meja berhasil ditambahkan',
-            'meja' => $meja
-        ], 201);
+        return response()->json(['message' => 'Meja berhasil ditambahkan'], 201);
     }
 
-    // Menampilkan meja berdasarkan ID
+    
     public function show($id)
     {
         $meja = Meja::findOrFail($id);
         return response()->json($meja);
     }
 
-    // Mengupdate meja berdasarkan ID
     public function update(Request $request, $id)
     {
         $meja = Meja::findOrFail($id);
 
-        // Validasi input
         $request->validate([
             'nomor' => 'required|unique:meja,nomor,' . $meja->id,
             'area' => 'required|string',
@@ -71,7 +59,6 @@ class MejaController extends Controller
             'status' => 'required|in:tersedia,dipesan,digunakan',
         ]);
 
-        // Mengupdate meja
         $meja->update([
             'nomor' => $request->nomor,
             'area' => $request->area,
@@ -79,20 +66,15 @@ class MejaController extends Controller
             'status' => $request->status,
         ]);
 
-        return response()->json([
-            'message' => 'Meja berhasil diupdate',
-            'meja' => $meja
-        ]);
+        return response()->json(['message' => 'Meja berhasil diupdate']);
     }
 
-    // Menghapus meja berdasarkan ID
+
     public function destroy($id)
     {
         $meja = Meja::findOrFail($id);
         $meja->delete();
 
-        return response()->json([
-            'message' => 'Meja berhasil dihapus'
-        ]);
+        return redirect()->route('meja.index')->with('success', 'Meja berhasil dihapus');
     }
 }
