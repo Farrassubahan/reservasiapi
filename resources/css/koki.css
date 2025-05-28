@@ -326,7 +326,6 @@ select:hover {
 }
 .header-menu {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 2rem;
 }
@@ -357,8 +356,6 @@ select:hover {
   background-color: #EAEAEA47;
   margin-top: 1rem;
   border-top: none;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
   display: flex;
   align-items: center;
   border-color: #000000;
@@ -420,11 +417,11 @@ select:hover {
 
 .modal-content {
   background-color: #f2f2f2;
-  margin: 6% auto;
-  padding: 30px 37px;
+  margin:auto;
+  padding: 24px 30px;
   border-radius: 13px;
   width: 540px;              /* 1.5x dari 360px */
-  max-width: 95%;
+  max-width: 80%;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   position: relative;
   font-size: 1.1rem;         /* font base diperbesar */
@@ -562,4 +559,11 @@ select:hover {
 
 .close-button:hover {
   color: #444;
+}
+.header-meja {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 40px;
 }
