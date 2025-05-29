@@ -648,3 +648,78 @@ select:hover {
     border-radius: 4px;
     cursor: pointer;
 }
+.header-usm {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 4rem;
+  margin-top: 40px;
+}
+.header-usm input[type="search"] {
+  width: 350px;
+  height: 50px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.header-usm select{
+  width: 350px;
+  height: 50px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  margin-top: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.col-usname {
+  flex: 3;
+}
+.col-email{
+  flex: 1;
+}
+.col-jabatan{
+ flex: 2;
+}
+.header-row-usm, .card-usm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+
+
+
+.header-row-usm h2, .card-usm > div {
+    flex: 1;
+    margin: 0;
+}
+
+.col-action {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.btn-hapus, .btn-edit {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-edit i,
+.btn-hapus i {
+    pointer-events: none;
+}
+.card-usm{
+  background-color: #f0f0f0;
+}
