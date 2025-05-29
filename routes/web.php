@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UsmController;
 use App\Http\Controllers\Admin\MejaController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Auth\LoginController;
@@ -63,6 +64,13 @@ Route::prefix('admin')->group(function () {
     Route::get('/meja/{id}', [MejaController::class, 'show'])->name('meja.show');
     Route::put('/meja/{id}', [MejaController::class, 'update'])->name('meja.update');
     Route::delete('/meja/{id}', [MejaController::class, 'destroy'])->name('meja.destroy');
+
+    // admin user management
+    Route::get('/user-management', [UsmController::class, 'index'])->name('admin.usm.index');
+    Route::post('/user-management/store', [UsmController::class, 'store'])->name('admin.usm.store');
+    Route::post('/user-management/update/{id}', [UsmController::class, 'update'])->name('admin.usm.update');
+    Route::delete('/user-management/delete/{id}', [UsmController::class, 'destroy'])->name('admin.usm.destroy');
+    Route::get('/user-management/{id}', [UsmController::class, 'show'])->name('admin.usm.show');
 });
 
 // Koki routes

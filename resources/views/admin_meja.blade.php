@@ -11,6 +11,7 @@
     <title>Admin Meja</title>
     @vite(['resources/css/koki.css', 'resources/js/app.js'])
 </head>
+
 <body>
     <div class="layout">
         <div class="sidebar">
@@ -21,7 +22,7 @@
             <a href="{{ route('menu.index') }}">Menu</a>
             <a class="active" href="{{ route('meja.index') }}">Meja</a>
             <a href="#">Laporan</a>
-            <a href="#">Manajemen User</a>
+            <a href="{{ route('admin.usm.index') }}">Manajemen User</a>
         </div>
         <div class="header" style="justify-content: center !important;">
             <form method="GET" action="{{ route('meja.index') }}">
@@ -237,7 +238,9 @@
                 document.querySelectorAll('.btn-edit').forEach(button => {
                     button.addEventListener('click', function() {
                         const id = this.getAttribute('data-id');
-                        fetch(/admin/meja/${id})
+                        fetch(/admin/meja / $ {
+                                id
+                            })
                             .then(res => {
                                 if (!res.ok) throw new Error('Gagal mengambil data');
                                 return res.json();
@@ -262,7 +265,9 @@
                     const id = document.getElementById('edit_id').value;
                     const formData = new FormData(this);
 
-                    fetch(/admin/meja/${id}, {
+                    fetch(/admin/meja / $ {
+                            id
+                        }, {
                             method: "POST",
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -333,4 +338,5 @@
             </script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
+
 </html>
