@@ -19,10 +19,10 @@
             <a href="{{ route('admin.dashboard') }}">Dashboard</a>
             <a class="active" href="{{ route('reservasi.index') }}">Reservasi</a>
             <a href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
-            <a  href="{{ route('menu.index') }}">Menu</a>
-            <a href="#">Meja</a>
+            <a href="{{ route('menu.index') }}">Menu</a>
+            <a href="{{ route('meja.index') }}">Meja</a>
             <a href="#">Laporan</a>
-            <a href="#">Manajemen User</a>
+            <a href="{{ route('admin.usm.index') }}">Manajemen User</a>
         </div>
 
         <div class="main">

@@ -9,10 +9,13 @@ body {
   display: flex;
   height: 100vh;
 }
+
 .main {
-  margin-left: 18rem; /* sama dengan lebar sidebar */
+  margin-left: 18rem;
+  /* sama dengan lebar sidebar */
   padding: 1.5rem 2rem;
 }
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -23,7 +26,8 @@ body {
   color: white;
   padding: 20px 1rem;
   overflow-y: auto;
-  z-index: 1000; /* supaya di atas konten lain */
+  z-index: 1000;
+  /* supaya di atas konten lain */
 }
 
 .sidebar h2 {
@@ -42,15 +46,18 @@ body {
 .sidebar a:hover {
   background-color: #66aedd;
 }
+
 .sidebar a.active {
   background-color: #c7e9ff;
 }
+
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .content {
   padding: 20px;
 }
@@ -74,8 +81,9 @@ body {
   width: 15rem;
   text-align: center;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 .pesanan {
   margin-top: 40px;
   padding: 0 20px;
@@ -100,6 +108,7 @@ body {
   background-color: #f2f2f2;
   font-weight: bold;
 }
+
 .head {
   display: flex;
   justify-content: space-between;
@@ -130,18 +139,21 @@ select:hover {
   background-color: #e9e9e9;
 }
 
- select, button {
-    font-size: 0.8rem;
-    padding: 3px 6px;
-    margin-left: 4px;
-    border-radius: 4px;
-  }
-  button {
-    cursor: pointer;
-  }
+select,
+button {
+  font-size: 0.8rem;
+  padding: 3px 6px;
+  margin-left: 4px;
+  border-radius: 4px;
+}
 
-  .sidebar form.logout-form {
-  margin: 0; /* supaya tidak ada jarak */
+button {
+  cursor: pointer;
+}
+
+.sidebar form.logout-form {
+  margin: 0;
+  /* supaya tidak ada jarak */
 }
 
 .sidebar form.logout-form button {
@@ -153,14 +165,17 @@ select:hover {
   border: none;
   text-align: left;
   cursor: pointer;
-  font: inherit; /* supaya font sama dengan teks lain */
+  font: inherit;
+  /* supaya font sama dengan teks lain */
   text-decoration: none;
   transition: background 0.3s;
 }
 
 .sidebar form.logout-form button:hover {
-  background: #444; /* atau warna hover yang kamu pakai di .sidebar a:hover */
+  background: #444;
+  /* atau warna hover yang kamu pakai di .sidebar a:hover */
 }
+
 .stat {
   display: flex;
   margin-top: 30px;
@@ -175,14 +190,16 @@ select:hover {
   width: 25rem;
   height: 20rem;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 #statusChart {
-    width: 290px !important;
-    height: 290px !important;
-    display: block;
-    margin: 0 auto;
+  width: 290px !important;
+  height: 290px !important;
+  display: block;
+  margin: 0 auto;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -191,6 +208,7 @@ select:hover {
   gap: 5rem;
   margin-top: 40px;
 }
+
 .header input[type="search"] {
   width: 350px;
   height: 50px;
@@ -202,7 +220,8 @@ select:hover {
   outline: none;
   transition: border-color 0.3s ease;
 }
-.header select{
+
+.header select {
   width: 350px;
   height: 50px;
   padding: 8px 12px;
@@ -218,12 +237,14 @@ select:hover {
   border-color: #4C85AA;
   box-shadow: 0 0 5px rgba(76, 133, 170, 0.6);
 }
+
 .content-reservasi {
   width: 200%;
   max-width: 1200px;
   margin: 20px auto;
   font-family: Arial, sans-serif;
 }
+
 .header-row,
 .card-reservasi {
   display: flex;
@@ -249,22 +270,28 @@ select:hover {
 .col-name {
   flex: 2;
 }
+
 .col-date {
   flex: 2;
 }
+
 .col-codereservasi {
   flex: 2;
 }
+
 .col-people {
   flex: 1.5;
 }
+
 .col-status {
   flex: 1.2;
 }
+
 .col-action {
   flex: 0.8;
   text-align: center;
 }
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -282,7 +309,7 @@ select:hover {
   position: absolute;
   right: 0;
   background-color: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 8px 0;
   border-radius: 6px;
   z-index: 1;
@@ -302,39 +329,47 @@ select:hover {
 .dropdown-menu button:hover {
   background-color: #f0f0f0;
 }
+
 .col-total {
   flex: 0.5;
 }
-.col-no{
+
+.col-no {
   flex: 0.5
 }
+
 .header-row-menu {
   font-weight: bold;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
+
 .content-menu {
   width: 200%;
   max-width: 1200px;
   margin: 20px auto;
   font-family: Arial, sans-serif;
 }
+
 .header-row-menu,
 .card-menu {
   display: flex;
   padding: 12px 16px;
 }
+
 .header-menu {
   display: flex;
   align-items: center;
   padding: 2rem;
 }
+
 .data-menu {
   font-size: 1.5rem;
   font-weight: bold;
   margin-right: 10rem;
   white-space: nowrap;
 }
+
 .tambah-menu {
   display: flex;
   justify-content: center;
@@ -352,6 +387,7 @@ select:hover {
   width: 100%;
   margin-left: 40rem;
 }
+
 .card-menu {
   background-color: #EAEAEA47;
   margin-top: 1rem;
@@ -362,32 +398,39 @@ select:hover {
   border-width: 2px;
   border-style: solid;
 }
+
 .gambar-seragam {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
 }
-.col-gambar{
-  flex:1;
+
+.col-gambar {
+  flex: 1;
 }
-.col-name-menu{
-  flex:2;
+
+.col-name-menu {
+  flex: 2;
 }
-.col-deskripsi{
-  flex:1;
+
+.col-deskripsi {
+  flex: 1;
 }
-.col-harga{
-  flex:2;
+
+.col-harga {
+  flex: 2;
 }
-.col-kategori{
-  flex:3;
+
+.col-kategori {
+  flex: 3;
 }
+
 .col-stok {
   flex: 1;
   display: flex;
   align-items: center;
-   margin-left: 5rem; 
+  margin-left: 5rem;
 }
 
 .col-stok select {
@@ -401,35 +444,41 @@ select:hover {
   cursor: pointer;
 }
 
-.col-action{
-  flex:0.8;
+.col-action {
+  flex: 0.8;
   text-align: center;
 }
+
 .modal {
   display: none;
   position: fixed;
   z-index: 1000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   font-family: 'Segoe UI', sans-serif;
 }
 
 .modal-content {
   background-color: #f2f2f2;
-  margin:auto;
+  margin: auto;
   padding: 24px 30px;
   border-radius: 13px;
-  width: 540px;              /* 1.5x dari 360px */
+  width: 540px;
+  /* 1.5x dari 360px */
   max-width: 80%;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   position: relative;
-  font-size: 1.1rem;         /* font base diperbesar */
+  font-size: 1.1rem;
+  /* font base diperbesar */
 }
 
 .modal-content h2 {
   margin-top: 0;
-  font-size: 1.95rem;        /* judul diperbesar */
+  font-size: 1.95rem;
+  /* judul diperbesar */
   text-align: center;
   color: #333;
 }
@@ -444,6 +493,8 @@ select:hover {
 }
 
 .modal-content input[type="text"],
+.modal-content input[type="email"],
+.modal-content input[type="password"],
 .modal-content input[type="number"],
 .modal-content select {
   width: 100%;
@@ -454,7 +505,9 @@ select:hover {
   font-size: 1.1rem;
   background-color: white;
   height: 42px;
+  
 }
+
 
 .horizontal-group {
   display: flex;
@@ -473,7 +526,8 @@ select:hover {
 }
 
 .image-preview {
-  width: 105px;              /* 1.5x dari 70px */
+  width: 105px;
+  /* 1.5x dari 70px */
   height: 105px;
   background-color: #e0e0e0;
   border: 2.5px dashed #aaa;
@@ -529,6 +583,7 @@ select:hover {
   transition: background-color 0.3s ease;
 }
 
+
 .modal-content button[type="submit"] {
   background-color: #5D58F2;
   color: white;
@@ -560,6 +615,7 @@ select:hover {
 .close-button:hover {
   color: #444;
 }
+
 .header-meja {
   display: flex;
   justify-content: center;
@@ -567,6 +623,7 @@ select:hover {
   margin-bottom: 20px;
   margin-top: 40px;
 }
+
 .card-tabel {
   background-color: #ecf0f1;
   width: 25rem;
@@ -586,7 +643,8 @@ select:hover {
   border-collapse: collapse;
 }
 
-.card-tabel th, .card-tabel td {
+.card-tabel th,
+.card-tabel td {
   padding: 0.5rem;
   border: 1px solid #bdc3c7;
   text-align: left;
@@ -596,58 +654,61 @@ select:hover {
   background-color: #dfe6e9;
   font-weight: bold;
 }
-.title{
+
+.title {
   background-color: #f8f9fa;
   margin-top: 1rem;
   margin-left: -20px;
   margin-right: -20px;
   padding: 1rem 25rem;
 }
+
 .performa-section {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 20px;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 20px;
+  gap: 1rem;
 }
 
 .performa-section table {
-    width: 100%;
-    flex-grow: 1;
-    border-collapse: collapse;
-    font-size: 1rem;
+  width: 100%;
+  flex-grow: 1;
+  border-collapse: collapse;
+  font-size: 1rem;
 }
 
 .performa-section th,
 .performa-section td {
-    padding: 1rem;
-    border: 1px solid #ccc;
-    text-align: center;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  text-align: center;
 }
 
 .performa-section thead {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 .performa-controls {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .performa-controls select {
-    padding: 0.5rem;
-    font-size: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
 }
 
 .performa-controls button {
-    padding: 0.5rem 1.2rem;
-    font-size: 1rem;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
+
 .header-usm {
   display: flex;
   justify-content: space-between;
@@ -656,6 +717,7 @@ select:hover {
   gap: 4rem;
   margin-top: 40px;
 }
+
 .header-usm input[type="search"] {
   width: 350px;
   height: 50px;
@@ -666,7 +728,8 @@ select:hover {
   outline: none;
   transition: border-color 0.3s ease;
 }
-.header-usm select{
+
+.header-usm select {
   width: 350px;
   height: 50px;
   padding: 8px 12px;
@@ -677,49 +740,60 @@ select:hover {
   outline: none;
   transition: border-color 0.3s ease;
 }
+
 .col-usname {
   flex: 3;
 }
-.col-email{
+
+.col-email {
   flex: 1;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
-.col-jabatan{
- flex: 2;
+
+.col-jabatan {
+  flex: 2;
 }
-.header-row-usm, .card-usm {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #ccc;
-    text-align: center;
+
+.header-row-usm,
+.card-usm {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
 }
 
 
 
-.header-row-usm h2, .card-usm > div {
-    flex: 1;
-    margin: 0;
+.header-row-usm h2,
+.card-usm>div {
+  flex: 1;
+  margin: 0;
 }
 
 .col-action {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
 }
 
-.btn-hapus, .btn-edit {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+.btn-hapus,
+.btn-edit {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .btn-edit i,
 .btn-hapus i {
-    pointer-events: none;
+  pointer-events: none;
 }
-.card-usm{
+
+.card-usm {
   background-color: #f0f0f0;
 }
