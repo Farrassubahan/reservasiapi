@@ -65,6 +65,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/meja/{id}', [MejaController::class, 'show'])->name('meja.show');
     Route::put('/meja/{id}', [MejaController::class, 'update'])->name('meja.update');
     Route::delete('/meja/{id}', [MejaController::class, 'destroy'])->name('meja.destroy');
+
+    // admin laporan
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
 });
 
 // Koki routes
@@ -73,4 +76,3 @@ Route::middleware(['auth', 'role:Koki'])->prefix('koki')->group(function () {
     Route::get('/pesanan', [DapurController::class, 'pesananMasuk'])->name('koki.pesanan'); // dari teman
     Route::put('/pesanan/{id}/status', [DapurController::class, 'updateStatus']);
 });
-
