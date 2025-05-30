@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +23,7 @@ class Pesanan extends Model
     }
 
     public function reservasi()
-    { 
+    {
         return $this->belongsTo(Reservasi::class, 'reservasi_id');
     }
 
@@ -32,9 +31,20 @@ class Pesanan extends Model
     {
         return $this->belongsTo(Menu::class, 'menu_id');
     }
-    
+
     public function pembayaran()
     {
         return $this->hasOne(Pembayaran::class);
+    }
+
+    public function ulasan()
+    {
+        return $this->hasOne(Ulasan::class, 'pesanan_id');
+    }
+
+    // Relasi ke RatingKoki (optional, satu pesanan punya satu rating koki)
+    public function ratingKoki()
+    {
+        return $this->hasOne(RatingKoki::class);
     }
 }
