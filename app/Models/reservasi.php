@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,13 @@ class Reservasi extends Model
     {
         return $this->hasMany(Pesanan::class);
     }
-}
+    public function pelayan()
+    {
+        return $this->belongsTo(Pengguna::class, 'pelayan_id');
+    }
 
- 
+    public function ratingPelayan()
+    {
+        return $this->hasOne(RatingPelayan::class, 'reservasi_id');
+    }
+}

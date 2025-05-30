@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Pengguna extends Authenticatable 
+class Pengguna extends Authenticatable
 {
     use HasApiTokens, HasFactory;
 
     protected $table = 'pengguna';
 
-    protected $fillable = ['nama', 'email', 'telepon', 'password','role','google_id'];
+    protected $fillable = ['nama', 'email', 'telepon', 'password', 'role', 'google_id'];
 
     // Relasi ke tabel reservasi
     public function reservasi()
@@ -36,5 +36,33 @@ class Pengguna extends Authenticatable
     public function getJumlahReservasiAttribute()
     {
         return $this->reservasi()->count();
+    }
+
+    public function ulasan()
+    {
+        // Ulasan yang ditulis pengguna ini
+        return $this->hasMany(Ulasan::class, 'pengguna_id');
+    }
+
+    // Jika kamu ingin relasi ke ulasan yang menilai pengguna ini (misal ulasan untuk pengguna)
+    public function ulasanDiterima()
+    {
+        return $this->hasMany(Ulasan::class, 'penilai_id');
+    }
+
+    public function reservasiDilayani()
+    {
+        return $this->hasMany(Reservasi::class, 'pelayan_id');
+    }
+
+    public function ratingPelayanDiterima()
+    {
+        return $this->hasMany(RatingPelayan::class, 'pelayan_id');
+    }
+
+    // Relasi ke rating koki (sebagai koki yang mendapat rating)
+    public function ratingKokis()
+    {
+        return $this->hasMany(RatingKoki::class, 'koki_id');
     }
 }
