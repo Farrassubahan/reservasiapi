@@ -19,8 +19,13 @@
          <a href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
          <a href="{{ route('menu.index') }}">Menu</a>
          <a href="{{ route('meja.index') }}">Meja</a>
-         <a href="#">Laporan</a>
+         <a href="{{ route('admin.laporan') }}">Laporan</a>
          <a href="{{ route('admin.usm.index') }}">Manajemen User</a>
+         <form method="POST" action="{{ route('logout') }}" class="logout-form" id="logout-form">
+             @csrf
+             <button type="submit" id="logout-btn">Logout</button>
+         </form>
+
      </div>
      <div class="main">
          <div class="head">
@@ -166,6 +171,27 @@
              }
          });
      </script>
+
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <script>
+         document.getElementById('logout-btn').addEventListener('click', function(e) {
+             e.preventDefault();
+
+             Swal.fire({
+                 title: 'Apakah Anda yakin ingin logout?',
+                 icon: 'warning',
+                 showCancelButton: true,
+                 confirmButtonText: 'Ya, Logout',
+                 cancelButtonText: 'Batal',
+                 reverseButtons: true
+             }).then((result) => {
+                 if (result.isConfirmed) {
+                     document.getElementById('logout-form').submit();
+                 }
+             });
+         });
+     </script>
+
  </body>
 
  </html>

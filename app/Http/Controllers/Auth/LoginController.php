@@ -15,6 +15,38 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required',
+    //     ]);
+
+    //     $user = Pengguna::where('email', $credentials['email'])->first();
+
+    //     if (!$user || !Hash::check($credentials['password'], $user->password)) {
+    //         return back()->withErrors(['email' => 'Email atau password salah']);
+    //     }
+
+    //     Auth::login($user);
+    //     $request->session()->regenerate();
+
+    //     $role = strtolower($user->role);
+
+    //     if ($role === 'koki') {
+    //         return redirect()->route('koki.dashboard'); 
+    //     } elseif ($role === 'Pelayan') {
+    //         return redirect()->route('pelayan.dashboard');
+    //     } elseif ($role === 'Admin') {
+    //         return redirect()->route('admin.dashboard');
+    //     }
+
+    //     // dd($user->role);
+
+    //     Auth::logout();
+    //     return redirect()->route('login')->withErrors(['role' => 'Role tidak dikenali']);
+    // }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -31,18 +63,23 @@ class LoginController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        $role = strtolower($user->role);
+        $role = $user->role;
 
-        if ($role === 'koki') {
-            return redirect()->route('koki.dashboard'); 
-        } elseif ($role === 'Pelayan') {
-            return redirect()->route('pelayan.dashboard');
-        } elseif ($role === 'Admin') {
-            return redirect()->route('admin.dashboard');
+        switch ($role) {
+            case 'Koki':
+                return redirect()->route('koki.dashboard');
+
+            case 'Pelayan':
+                return redirect()->route('pelayan.dashboard');
+
+            case 'Admin':
+                return redirect()->route('admin.dashboard');
+
+        
         }
 
         Auth::logout();
-        return redirect()->route('login')->withErrors(['role' => 'Role tidak dikenali']);
+        return redirect()->route('login')->withErrors(['role' => 'Role tidak dikenali: ' . $role]);
     }
 
     public function logout(Request $request)

@@ -11,19 +11,23 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Admin</title>
     @vite(['resources/css/koki.css', 'resources/js/app.js'])
-</head>
+</head> 
 
 <body>
     <div class="layout">
         <div class="sidebar">
             <h2>Menu</h2>
-            <a  href="{{ route('admin.dashboard') }}">Dashboard</a>
+            <a href="{{ route('admin.dashboard') }}">Dashboard</a>
             <a href="{{ route('reservasi.index') }}">Reservasi</a>
             <a href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
             <a class="active" href="{{ route('menu.index') }}">Menu</a>
             <a href="{{ route('meja.index') }}">Meja</a>
-            <a href="#">Laporan</a>
+            <a href="{{ route('admin.laporan') }}">Laporan</a>
             <a href="{{ route('admin.usm.index') }}">Manajemen User</a>
+            <form method="POST" action="{{ route('logout') }}" id="logout-form" class="logout-form">
+                @csrf
+                <button type="submit" id="logout-btn">Logout</button>
+            </form>
         </div>
 
         <div class="main">
@@ -411,6 +415,24 @@
                                 form.submit(); // Submit form setelah konfirmasi
                             }
                         });
+                    });
+                });
+            </script>
+            <script>
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault(); // cegah submit langsung
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin ingin logout?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Logout',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('logout-form').submit();
+                        }
                     });
                 });
             </script>

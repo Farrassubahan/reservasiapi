@@ -21,8 +21,12 @@
             <a class="active" href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
             <a href="{{ route('menu.index') }}">Menu</a>
             <a href="{{ route('meja.index') }}">Meja</a>
-            <a href="#">Laporan</a>
+            <a href="{{ route('admin.laporan') }}">Laporan</a>
             <a href="{{ route('admin.usm.index') }}">Manajemen User</a>
+            <form method="POST" action="{{ route('logout') }}" id="logout-form" class="logout-form">
+                @csrf
+                <button type="submit" id="logout-btn">Logout</button>
+            </form>
         </div>
 
         <div class="main">
@@ -179,6 +183,25 @@
                 function closeEditModal() {
                     document.getElementById('editModal').style.display = 'none';
                 }
+            </script>
+
+            <script>
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault(); // cegah submit langsung
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin ingin logout?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Logout',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('logout-form').submit();
+                        }
+                    });
+                });
             </script>
 
         </div>

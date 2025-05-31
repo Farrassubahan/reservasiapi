@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Login Pengguna</title>
     <style>
+        
         body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
-            background-color: #f4f4f4;
+            font-family: Arial,sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            margin: 0;
         }
 
         .login-container {
@@ -17,6 +23,7 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
         }
 
         h2 {
@@ -26,7 +33,7 @@
 
         input[type="email"],
         input[type="password"] {
-            width: 100%;
+            width: 93%;
             padding: 12px;
             margin: 8px 0;
             border-radius: 4px;
@@ -58,26 +65,28 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="login-container">
-    <h2>Login Pengguna</h2>
+    <div class="login-container">
+        <h2>Login </h2>
 
-    @if ($errors->any())
-        <div class="error">
-            @foreach ($errors->all() as $error)
-                <div>{{ $error }}</div>
-            @endforeach
-        </div>
-    @endif
+        @if ($errors->any())
+            <div class="error">
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
 
-    <form method="POST" action="/login">
-        @csrf
-        <input type="email" name="email" placeholder="Email" required />
-        <input type="password" name="password" placeholder="Password" required />
-        <button type="submit">Login</button>
-    </form>
-</div>
+        <form method="POST" action="/login">
+            @csrf
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+        </form>
+    </div>
 
 </body>
+
 </html>

@@ -29,8 +29,9 @@ class MenuController extends Controller
             $validated['gambar'] = $path;
         }
         
-        $stokInput = (int) $request->input('stok');
-        $validated['tersedia'] = $stokInput > 0 ? 'tersedia' : 'kosong';
+        // $stokInput = (int) $request->input('stok');
+        // $validated['tersedia'] = $stokInput > 0 ? 'tersedia' : 'kosong';
+        $validated['tersedia'] = 'tersedia';
         
         Menu::create($validated);
         

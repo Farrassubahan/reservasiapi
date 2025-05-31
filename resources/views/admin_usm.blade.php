@@ -22,8 +22,12 @@
             <a href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
             <a href="{{ route('menu.index') }}">Menu</a>
             <a href="{{ route('meja.index') }}">Meja</a>
-            <a href="#">Laporan</a>
+            <a href="{{ route('admin.laporan') }}">Laporan</a>
             <a class="active" href="{{ route('admin.usm.index') }}">Manajemen User</a>
+            <form method="POST" action="{{ route('logout') }}" id="logout-form" class="logout-form">
+                @csrf
+                <button type="submit" id="logout-btn">Logout</button>
+            </form>
         </div>
 
         <div class="main">
@@ -102,7 +106,7 @@
                             </div>
 
                             <label for="role">Jabatan</label>
-                            <select id="role" name="role" class="select2" required>
+                            <select id="role" name="role" class="select2" style="height: 3.3rem;" required>
                                 <option value="">-- Pilih Jabatan --</option>
                                 <option value="Pelanggan">Pelanggan</option>
                                 <option value="Pelayan">Pelayan</option>
@@ -139,7 +143,7 @@
                             <input type="text" id="edit_telepon" name="telepon" required>
 
                             <label for="edit_role">Jabatan</label>
-                            <select id="edit_role" name="role" required>
+                            <select id="edit_role" name="role" style="height: 3.3rem;" required>
                                 <option value="">-- Pilih Jabatan --</option>
                                 <option value="Pelanggan">Pelanggan</option>
                                 <option value="Pelayan">Pelayan</option>
@@ -291,6 +295,25 @@
                         } catch (error) {
                             Swal.fire('Gagal', error.message, 'error');
                         }
+                    });
+                </script>
+
+                <script>
+                    document.getElementById('logout-btn').addEventListener('click', function(e) {
+                        e.preventDefault(); // cegah submit langsung
+
+                        Swal.fire({
+                            title: 'Apakah Anda yakin ingin logout?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya, Logout',
+                            cancelButtonText: 'Batal',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('logout-form').submit();
+                            }
+                        });
                     });
                 </script>
 
