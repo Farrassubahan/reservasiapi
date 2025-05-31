@@ -21,8 +21,12 @@
             <a href="{{ route('admin.pelanggan.index') }}">Pelanggan</a>
             <a href="{{ route('menu.index') }}">Menu</a>
             <a class="active" href="{{ route('meja.index') }}">Meja</a>
-            <a href="#">Laporan</a>
+            <a href="{{ route('admin.laporan') }}">Laporan</a>
             <a href="{{ route('admin.usm.index') }}">Manajemen User</a>
+            <form method="POST" action="{{ route('logout') }}" id="logout-form" class="logout-form">
+                @csrf
+                <button type="submit" id="logout-btn">Logout</button>
+            </form>
         </div>
         <div class="header" style="justify-content: center !important;">
             <form method="GET" action="{{ route('meja.index') }}">
@@ -113,7 +117,7 @@
                             <input type="number" id="kapasitas" name="kapasitas" required>
 
                             <label for="status">Status</label>
-                            <select id="status" name="status" required>
+                            <select id="status" name="status" style="height: 3rem;" required>
                                 <option value="">Pilih Status</option>
                                 <option value="tersedia">Tersedia</option>
                                 <option value="dipesan">Dipesan</option>
@@ -146,7 +150,7 @@
                             <input type="number" id="edit_kapasitas" name="kapasitas" required>
 
                             <label for="edit_status">Status</label>
-                            <select id="edit_status" name="status" required>
+                            <select id="edit_status" name="status" style="height: 3rem;" required>
                                 <option value="">Pilih Status</option>
                                 <option value="tersedia">Tersedia</option>
                                 <option value="dipesan">Dipesan</option>
@@ -337,6 +341,25 @@
                 });
             </script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+            <script>
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault(); // cegah submit langsung
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin ingin logout?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Logout',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('logout-form').submit();
+                        }
+                    });
+                });
+            </script>
 </body>
 
 </html>

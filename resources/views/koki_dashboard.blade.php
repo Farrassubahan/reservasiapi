@@ -8,16 +8,16 @@
     <title>Koki</title>
     @vite(['resources/css/koki.css', 'resources/js/app.js'])
 </head>
- 
+
 <body>
 
     <div class="sidebar">
         <h2></h2>
         <a href="#" class="active">Dashboard</a>
         <a href="{{ route('koki.pesanan') }}">Pesanan Masuk</a>
-        <form method="POST" action="{{ route('logout') }}" class="logout-form">
+        <form method="POST" action="{{ route('logout') }}" id="logout-form" class="logout-form">
             @csrf
-            <button type="submit">Logout</button>
+            <button type="submit" id="logout-btn">Logout</button>
         </form>
 
     </div>
@@ -94,6 +94,26 @@
     </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Apakah Anda yakin ingin logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('logout-form').submit();
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>
