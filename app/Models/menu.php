@@ -15,6 +15,7 @@ class Menu extends Model
         'deskripsi',
         'gambar',
         'tersedia',
+        'jumlah _terjual',
     ]; 
     public function pesanan()
     {
