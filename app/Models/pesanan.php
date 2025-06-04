@@ -32,10 +32,10 @@ class Pesanan extends Model
         return $this->belongsTo(Menu::class, 'menu_id');
     }
 
-    public function pembayaran()
-    {
-        return $this->hasOne(Pembayaran::class);
-    }
+    // public function pembayaran()
+    // {
+    //     return $this->hasOne(Pembayaran::class);
+    // }
 
     public function ulasan()
     {
