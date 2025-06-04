@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pesanan_id')->constrained('pesanan')->onDelete('cascade');
+            $table->foreignId('reservasi_id')->constrained('reservasi')->onDelete('cascade');
             $table->enum('metode', ['qris', 'transfer', 'cod']);
             $table->string('bukti')->nullable();
             $table->enum('status', ['menunggu', 'dikonfirmasi', 'ditolak'])->default('menunggu');
             $table->timestamps();
         });
-        
-    }  
+    }
 
     /**
      * Reverse the migrations.
