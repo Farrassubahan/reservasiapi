@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\HistoriController;
+use App\Http\Controllers\API\ReservasiController;
 // use App\Http\Controllers\AuthController;
 
 
@@ -22,6 +23,12 @@ Route::get('/menu-terlaris', [MenuController::class, 'terlaris']);
 
 // Histori Api nih route nya
 Route::middleware('auth:sanctum')->get('/histori', [HistoriController::class, 'index']);
+
+// reservasi
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/reservasi', [ReservasiController::class, 'buatReservasi']);
+});
+
 /* 
 |--------------------------------------------------------------------------
 | API Routes
