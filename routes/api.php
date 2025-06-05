@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\HistoriController;
 use App\Http\Controllers\API\ReservasiController;
+use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
+
 // use App\Http\Controllers\AuthController;
 
 
@@ -29,13 +31,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservasi', [ReservasiController::class, 'buatReservasi']);
 });
 
-/* 
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will 
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Daftar reservasi + meja tersedia
+    Route::get('/pelayan/reservasi', [PelayanReservasiController::class, 'index']);
+
+    // Detail reservasi berdasarkan ID
+    Route::get('/pelayan/reservasi/{reservasiId}', [PelayanReservasiController::class, 'show']);
+
+    // Konfirmasi meja untuk reservasi tertentu
+    Route::post('/pelayan/reservasi/{reservasiId}/konfirmasi-meja', [PelayanReservasiController::class, 'konfirmasiMeja']);
+});
