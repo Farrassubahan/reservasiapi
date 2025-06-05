@@ -7,7 +7,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\HistoriController;
 use App\Http\Controllers\API\ReservasiController;
+
 use App\Http\Controllers\Api\ProfileController;
+
+
+
+
 // use App\Http\Controllers\AuthController;
 
 
@@ -31,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservasi', [ReservasiController::class, 'buatReservasi']);
 });
 
+
 /* 
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,5 +52,19 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
+});
+
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Daftar reservasi + meja tersedia
+    Route::get('/pelayan/reservasi', [PelayanReservasiController::class, 'index']);
+
+    // Detail reservasi berdasarkan ID
+    Route::get('/pelayan/reservasi/{reservasiId}', [PelayanReservasiController::class, 'show']);
+
+    // Konfirmasi meja untuk reservasi tertentu
+    Route::post('/pelayan/reservasi/{reservasiId}/konfirmasi-meja', [PelayanReservasiController::class, 'konfirmasiMeja']);
 });
 
