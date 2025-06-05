@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\ReservasiController;
+use App\Http\Controllers\Api\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,3 +83,4 @@ Route::middleware(['auth', 'role:Koki'])->prefix('koki')->group(function () {
     Route::get('/pesanan', [DapurController::class, 'pesananMasuk'])->name('koki.pesanan'); // dari teman
     Route::put('/pesanan/{id}/status', [DapurController::class, 'updateStatus']);
 });
+

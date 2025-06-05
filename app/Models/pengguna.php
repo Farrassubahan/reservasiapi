@@ -12,7 +12,7 @@ class Pengguna extends Authenticatable
 
     protected $table = 'pengguna';
 
-    protected $fillable = ['nama', 'email', 'telepon', 'password', 'role', 'google_id'];
+    protected $fillable = ['nama', 'email', 'telepon', 'password', 'role', 'foto', 'google_id'];
 
     // Relasi ke tabel reservasi
     public function reservasi()
@@ -64,5 +64,16 @@ class Pengguna extends Authenticatable
     public function ratingKokis()
     {
         return $this->hasMany(RatingKoki::class, 'koki_id');
+    }
+    public function getFotoUrlAttribute()
+    {
+        if ($this->foto) {
+            // kalau di DB cuma nama file saja
+            return asset('storage/profile/' . $this->foto);
+            // kalau di DB sudah lengkap "profile/namafile.jpg"
+            // return asset('storage/' . $this->foto);
+        }
+        // kalau foto tidak ada, bisa pakai default image
+        return asset('assets/icon/default-profile.png');
     }
 }

@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('telepon', 20);
             $table->string('password');
             $table->enum('role', ['Pelanggan', 'Pelayan', 'Koki', 'Admin'])->default('Pelanggan');
+            $table->string('foto')->nullable();
             $table->timestamps();
+            
         });
     }
 
