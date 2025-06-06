@@ -27,10 +27,10 @@ class ProfileController extends Controller
             'data' => [
                 'nama'      => $user->nama,
                 'email'     => $user->email,
-                'telepon'   => $user->telepon,
-                'role'      => $user->role,
+                // 'telepon'   => $user->telepon,
+                // 'role'      => $user->role,
                 'foto'      => $user->foto_url,   // gunakan accessor foto_url
-                'google_id' => $user->google_id,
+                // 'google_id' => $user->google_id,
             ]
         ], 200);
     }

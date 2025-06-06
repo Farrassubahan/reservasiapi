@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\HistoriController;
-use App\Http\Controllers\API\ReservasiController;
-
 use App\Http\Controllers\Api\ProfileController;
+
+use App\Http\Controllers\API\ReservasiController;
+use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 
 
 
