@@ -42,10 +42,43 @@ class PelayanReservasiController extends Controller
         ]);
     }
 
-    // Detail reservasi berdasarkan ID
+    // // Detail reservasi berdasarkan ID
+    // public function show($reservasiId)
+    // {
+    //     $reservasi = Reservasi::with(['pengguna:id,nama', 'meja'])->find($reservasiId);
+
+    //     if (!$reservasi) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Reservasi tidak ditemukan',
+    //         ], 404);
+    //     }
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Detail reservasi',
+    //         'data' => [
+    //             'id' => $reservasi->id,
+    //             'nama_pengguna' => $reservasi->pengguna->nama ?? 'Tidak diketahui',
+    //             'sesi' => $reservasi->sesi,
+    //             'tanggal' => $reservasi->tanggal,
+    //             'jumlah_tamu' => $reservasi->jumlah_tamu,
+    //             'status' => $reservasi->status,
+    //             'meja' => $reservasi->meja->map(function ($m) {
+    //                 return [
+    //                     'id' => $m->id,
+    //                     'nama' => $m->nama,
+    //                     'kapasitas' => $m->kapasitas,
+    //                     'status' => $m->status,
+    //                 ];
+    //             }),
+    //         ],
+    //     ]);
+    // }
+
     public function show($reservasiId)
     {
-        $reservasi = Reservasi::with(['pengguna:id,nama', 'meja'])->find($reservasiId);
+        $reservasi = Reservasi::with(['pengguna:id,nama', 'meja', 'pesanan.menu'])->find($reservasiId);
 
         if (!$reservasi) {
             return response()->json([
@@ -59,6 +92,7 @@ class PelayanReservasiController extends Controller
             'message' => 'Detail reservasi',
             'data' => [
                 'id' => $reservasi->id,
+                'kode_reservasi' => $reservasi->kode_reservasi,
                 'nama_pengguna' => $reservasi->pengguna->nama ?? 'Tidak diketahui',
                 'sesi' => $reservasi->sesi,
                 'tanggal' => $reservasi->tanggal,
@@ -70,6 +104,17 @@ class PelayanReservasiController extends Controller
                         'nama' => $m->nama,
                         'kapasitas' => $m->kapasitas,
                         'status' => $m->status,
+                    ];
+                }),
+                'pesanan' => $reservasi->pesanan->map(function ($p) {
+                    return [
+                        'id' => $p->id,
+                        'menu_id' => $p->menu_id,
+                        'nama_menu' => $p->menu->nama ?? 'Tidak diketahui',
+                        'harga' => $p->menu->harga ?? null,
+                        'jumlah' => $p->jumlah,
+                        'catatan' => $p->catatan,
+                        'status' => $p->status,
                     ];
                 }),
             ],
