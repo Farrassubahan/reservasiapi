@@ -7,8 +7,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\HistoriController;
 use App\Http\Controllers\Api\ProfileController;
-
 use App\Http\Controllers\API\ReservasiController;
+use App\Http\Controllers\API\Pelayan\mejaPelayan;
+use App\Http\Controllers\API\Pelayan\HistoryPelayan;
+use App\Http\Controllers\API\Pelayan\KehadiranReservasi;
 use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 
 
@@ -38,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+
 /* 
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,24 +51,23 @@ Route::middleware('auth:sanctum')->group(function () {
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-// profile
 Route::middleware('auth:sanctum')->group(function () {
+    // Profile
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
-});
 
-
-
-
-Route::middleware('auth:sanctum')->group(function () {
-    // Daftar reservasi + meja tersedia
+    // Pelayan - Reservasi
     Route::get('/pelayan/reservasi', [PelayanReservasiController::class, 'index']);
-
-    // Detail reservasi berdasarkan ID
-    Route::get('/pelayan/reservasi/{reservasiId}', [PelayanReservasiController::class, 'show']);
-
-    // Konfirmasi meja untuk reservasi tertentu
+    Route::get('/pelayan/reservasi/{reservasiId}', [PelayanReservasiController::class, 'show']);   
     Route::post('/pelayan/reservasi/{reservasiId}/konfirmasi-meja', [PelayanReservasiController::class, 'konfirmasiMeja']);
-});
 
+    // Pelayan - Kehadiran
+    Route::get('/pelayan/kehadiran-reservasi', [KehadiranReservasi::class, 'index']);
+    Route::put('/pelayan/reservasi/{id}/konfirmasi', [KehadiranReservasi::class, 'konfirmasi']);
+
+    // Histtory - buat pelayan
+    Route::get('/pelayan/history-reservasi', [HistoryPelayan::class, 'index']);
+
+    // meja di halaman pelayan
+    Route::get('/pelayan/meja', [mejaPelayan::class, 'index']);
+});
