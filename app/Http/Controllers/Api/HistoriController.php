@@ -18,6 +18,17 @@ class HistoriController extends Controller
             ->orderBy('tanggal', 'desc')
             ->get();
 
+        $histori->transform(function ($reservasi) {
+            $totalHarga = 0;
+            foreach ($reservasi->pesanan as $pesanan) {
+                $hargaMenu = $pesanan->menu->harga ?? 0;
+                $jumlahPesanan = $pesanan->jumlah ?? 1;
+                $totalHarga += $hargaMenu * $jumlahPesanan;
+            }
+            $reservasi->total_harga = $totalHarga;
+            return $reservasi;
+        });
+
         return response()->json([
             'status' => 'success',
             'data' => $histori
