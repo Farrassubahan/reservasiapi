@@ -19,7 +19,8 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             $table->string('gambar')->nullable();
             $table->enum('tersedia', ['tersedia', 'kosong'])->default('tersedia');
-            $table->string('jumlah_terjual')->nullable();
+            // $table->integer('jumlah_terjual')->nullable();
+            $table->integer('jumlah_terjual')->default(0)->nullable();
             $table->timestamps();
         });
     }

@@ -32,13 +32,17 @@ Route::get('/menu-terlaris', [MenuController::class, 'terlaris']);
 
 
 // Histori Api nih route nya
-Route::middleware('auth:sanctum')->get('/histori', [HistoriController::class, 'index']);
+// Route::middleware('auth:sanctum')->get('/histori', [HistoriController::class, 'index']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/histori', [HistoriController::class, 'index']);
+    Route::get('/histori/{id}', [HistoriController::class, 'show']); // untuk detail
+});
+
 
 // reservasi
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservasi', [ReservasiController::class, 'buatReservasi']);
     Route::get('/reservasi/{id}', [ReservasiController::class, 'show']);
-   
 });
 
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Reservasi;
 use App\Models\Pesanan;
 use App\Models\Pengguna;
+use App\Models\Menu;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -57,6 +58,14 @@ class ReservasiController extends Controller
                     'catatan' => $item['catatan'] ?? null,
                     'status' => 'menunggu'
                 ]);
+
+                // Update jumlah_terjual pada menu
+                // Menu::where('id', $item['menu_id'])->increment('jumlah_terjual', $item['jumlah']);
+                $menu = Menu::find($item['menu_id']);
+                if ($menu) {
+                    $menu->jumlah_terjual = ($menu->jumlah_terjual ?? 0) + $item['jumlah'];
+                    $menu->save();
+                }
             }
 
             DB::commit();
@@ -75,20 +84,22 @@ class ReservasiController extends Controller
             ], 500);
         }
     }
-   public function show($id)
-{
-    $reservasi = Reservasi::with(['pesanan', 'pengguna'])->find($id);
-    if (!$reservasi) {
+
+
+
+    public function show($id)
+    {
+        $reservasi = Reservasi::with(['pesanan', 'pengguna'])->find($id);
+        if (!$reservasi) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Reservasi tidak ditemukan.'
+            ], 404);
+        }
+
         return response()->json([
-            'status' => false,
-            'message' => 'Reservasi tidak ditemukan.'
-        ], 404);
+            'status' => true,
+            'data' => $reservasi
+        ]);
     }
-
-    return response()->json([
-        'status' => true,
-        'data' => $reservasi
-    ]);
-}
-
 }
