@@ -75,4 +75,20 @@ class ReservasiController extends Controller
             ], 500);
         }
     }
+   public function show($id)
+{
+    $reservasi = Reservasi::with(['pesanan', 'pengguna'])->find($id);
+    if (!$reservasi) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Reservasi tidak ditemukan.'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => true,
+        'data' => $reservasi
+    ]);
+}
+
 }

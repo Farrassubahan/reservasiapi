@@ -37,6 +37,8 @@ Route::middleware('auth:sanctum')->get('/histori', [HistoriController::class, 'i
 // reservasi
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservasi', [ReservasiController::class, 'buatReservasi']);
+    Route::get('/reservasi/{id}', [ReservasiController::class, 'show']);
+   
 });
 
 
@@ -58,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Pelayan - Reservasi
     Route::get('/pelayan/reservasi', [PelayanReservasiController::class, 'index']);
-    Route::get('/pelayan/reservasi/{reservasiId}', [PelayanReservasiController::class, 'show']);   
+    Route::get('/pelayan/reservasi/{reservasiId}', [PelayanReservasiController::class, 'show']);
     Route::post('/pelayan/reservasi/{reservasiId}/konfirmasi-meja', [PelayanReservasiController::class, 'konfirmasiMeja']);
 
     // Pelayan - Kehadiran
