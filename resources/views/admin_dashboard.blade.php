@@ -85,7 +85,7 @@
                              <td>{{ ucfirst($reservasi->status) }}</td>
                              <td>
                                  <!-- Hapus -->
-                                 <form action="{{ route('admin.reservasi.hapus', $reservasi->id) }}" method="POST"
+                                 <form action="{{ route('reservasi.destroy', $reservasi->id) }}" method="POST"
                                      style="display: inline;">
                                      @csrf
                                      @method('DELETE')
@@ -179,7 +179,7 @@
 
              Swal.fire({
                  title: 'Apakah Anda yakin ingin logout?',
-                 icon: 'warning',
+                 icon: 'warning', 
                  showCancelButton: true,
                  confirmButtonText: 'Ya, Logout',
                  cancelButtonText: 'Batal',

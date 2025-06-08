@@ -43,40 +43,80 @@ class AuthController extends Controller
         return Socialite::driver('google')->stateless()->redirect();
     }
 
+    // public function handleGoogleCallback()
+    // {
+    //     try {
+    //         $googleUser = Socialite::driver('google')->stateless()->user();
+
+    //         $user = Pengguna::where('google_id', $googleUser->getId())
+    //             ->orWhere('email', $googleUser->getEmail())
+    //             ->first();
+
+    //         if (!$user) {
+    //             $user = Pengguna::create([
+    //                 'nama' => $googleUser->getName(),
+    //                 'email' => $googleUser->getEmail(),
+    //                 'telepon' => '',
+    //                 'google_id' => $googleUser->getId(),
+    //                 'password' => Hash::make(Str::random(16)),
+    //             ]);
+    //         } else {
+    //             if (!$user->google_id) {
+    //                 $user->google_id = $googleUser->getId();
+    //                 $user->save();
+    //             }
+    //         }
+
+    //         $token = $user->createToken('auth_token')->plainTextToken;
+
+    //         // Redirect ke frontend Ionic (pastikan login.page.ts menangani token)
+    //         $frontendUrl = 'http://localhost:8100/login';
+    //         return redirect()->away("{$frontendUrl}?token={$token}&nama=" . urlencode($user->nama) . "&email=" . urlencode($user->email));
+    //     } catch (\Exception $e) {
+    //         $errorUrl = 'http://localhost:8100/login?error=' . urlencode('Gagal login dengan Google: ' . $e->getMessage());
+    //         return redirect()->away($errorUrl);
+    //     }
+    // }
+
     public function handleGoogleCallback()
-    {
-        try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+{
+    try {
+        $googleUser = Socialite::driver('google')->stateless()->user();
 
-            $user = Pengguna::where('google_id', $googleUser->getId())
-                ->orWhere('email', $googleUser->getEmail())
-                ->first();
+        $user = Pengguna::where('google_id', $googleUser->getId())
+            ->orWhere('email', $googleUser->getEmail())
+            ->first();
 
-            if (!$user) {
-                $user = Pengguna::create([
-                    'nama' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'telepon' => '',
-                    'google_id' => $googleUser->getId(),
-                    'password' => Hash::make(Str::random(16)),
-                ]);
-            } else {
-                if (!$user->google_id) {
-                    $user->google_id = $googleUser->getId();
-                    $user->save();
-                }
+        if (!$user) {
+            $user = Pengguna::create([
+                'nama' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'telepon' => '',
+                'google_id' => $googleUser->getId(),
+                'password' => Hash::make(Str::random(16)),
+            ]);
+        } else {
+            if (!$user->google_id) {
+                $user->google_id = $googleUser->getId();
+                $user->save();
             }
-
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            // Redirect ke frontend Ionic (pastikan login.page.ts menangani token)
-            $frontendUrl = 'http://localhost:8100/login';
-            return redirect()->away("{$frontendUrl}?token={$token}&nama=" . urlencode($user->nama) . "&email=" . urlencode($user->email));
-        } catch (\Exception $e) {
-            $errorUrl = 'http://localhost:8100/login?error=' . urlencode('Gagal login dengan Google: ' . $e->getMessage());
-            return redirect()->away($errorUrl);
         }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Render halaman yang mengirim token ke opener dan menutup popup
+        return response()->view('google_callback_success', [
+            'token' => $token,
+            'nama' => $user->nama,
+            'email' => $user->email,
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->view('google_callback_error', [
+            'message' => 'Gagal login dengan Google: ' . $e->getMessage()
+        ]);
     }
+}
 
     // Menambahkan fitur login
     public function login(Request $request)
