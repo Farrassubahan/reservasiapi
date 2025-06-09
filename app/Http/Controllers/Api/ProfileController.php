@@ -29,7 +29,7 @@ class ProfileController extends Controller
                 'email'     => $user->email,
                 // 'telepon'   => $user->telepon,
                 // 'role'      => $user->role,
-                'foto'      => $user->foto_url,   // gunakan accessor foto_url
+                'foto'      => $user->foto_url,   
                 // 'google_id' => $user->google_id,
             ]
         ], 200);
