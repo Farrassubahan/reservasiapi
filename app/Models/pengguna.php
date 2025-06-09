@@ -74,6 +74,6 @@ class Pengguna extends Authenticatable
             // return asset('storage/' . $this->foto);
         }
         // kalau foto tidak ada, bisa pakai default image
-        return asset('assets/icon/default-profile.png');
+        return asset('img/ajar.jpg');
     }
 }
