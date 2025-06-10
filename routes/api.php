@@ -12,7 +12,7 @@ use App\Http\Controllers\API\Pelayan\mejaPelayan;
 use App\Http\Controllers\API\Pelayan\HistoryPelayan;
 use App\Http\Controllers\API\Pelayan\KehadiranReservasi;
 use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
-
+use App\Http\Controllers\API\Pelayan\PemesananLangsungController;
 
 
 
@@ -76,4 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // meja di halaman pelayan
     Route::get('/pelayan/meja', [mejaPelayan::class, 'index']);
+
+    // pemesanan langsung di pelayan
+    Route::post('/pemesanan-langsung', [PemesananLangsungController::class, 'store']);
 });
+
