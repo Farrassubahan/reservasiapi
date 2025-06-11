@@ -27,9 +27,9 @@ class ProfileController extends Controller
             'data' => [
                 'nama'      => $user->nama,
                 'email'     => $user->email,
-                // 'telepon'   => $user->telepon,
+                'telepon'   => $user->telepon,
                 // 'role'      => $user->role,
-                'foto'      => $user->foto_url,   
+                'foto'      => $user->foto_url,
                 // 'google_id' => $user->google_id,
             ]
         ], 200);
@@ -47,41 +47,43 @@ class ProfileController extends Controller
             return response()->json(['message' => 'User tidak ditemukan'], 404);
         }
 
-        
-    // Simpan nama
-    // ✅ Tambahkan ini: validasi input
-    $validated = $request->validate([
-        'nama' => 'required|string|max:255',
-        'foto' => 'nullable|string', // base64 string
-    ]);
+        // ✅ Tambahkan validasi 'telepon'
+        $validated = $request->validate([
+            'nama'    => 'required|string|max:255',
+            'telepon' => 'required|digits_between:10,15', // ✅ validasi telepon minimal 10 digit
+            'foto'    => 'nullable|string', // base64 string
+        ]);
 
-    // Jika ada foto baru (base64)
-    if (!empty($validated['foto'])) {
-        // Ekstrak base64
-        preg_match("/^data:image\/(\w+);base64,/", $validated['foto'], $type);
-        $image = substr($validated['foto'], strpos($validated['foto'], ',') + 1);
-        $image = base64_decode($image);
-        $extension = $type[1] ?? 'jpg';
+        // Simpan nama dan telepon
+        $user->nama = $validated['nama'];
+        $user->telepon = $validated['telepon'];
 
-        // Buat nama file unik
-        $fileName = 'foto_' . time() . '.' . $extension;
+        // Jika ada foto baru (base64)
+        if (!empty($validated['foto'])) {
+            preg_match("/^data:image\/(\w+);base64,/", $validated['foto'], $type);
+            $image = substr($validated['foto'], strpos($validated['foto'], ',') + 1);
+            $image = base64_decode($image);
+            $extension = $type[1] ?? 'jpg';
 
-        // Simpan ke storage/app/public/profile
-        Storage::disk('public')->put("profile/$fileName", $image);
+            // Buat nama file unik
+            $fileName = 'foto_' . time() . '.' . $extension;
 
+            // Simpan ke storage/app/public/profile
+            Storage::disk('public')->put("profile/$fileName", $image);
 
-        // Simpan nama file ke DB
-        $user->foto = $fileName;
+            // Simpan nama file ke DB
+            $user->foto = $fileName;
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profil berhasil diperbarui',
+            'data' => [
+                'nama'    => $user->nama,
+                'telepon' => $user->telepon,
+                'foto'    => $user->foto_url,
+            ]
+        ]);
     }
-
-    $user->save();
-
-    return response()->json([
-        'message' => 'Profil berhasil diperbarui',
-        'data' => [
-            'nama' => $user->nama,
-            'foto' => $user->foto_url,
-        ]
-    ]);
-}
 }

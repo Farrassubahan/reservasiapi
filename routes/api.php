@@ -13,7 +13,7 @@ use App\Http\Controllers\API\Pelayan\HistoryPelayan;
 use App\Http\Controllers\API\Pelayan\KehadiranReservasi;
 use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 use App\Http\Controllers\API\Pelayan\PemesananLangsungController;
-
+use App\Http\Controllers\Api\MidtransController;
 
 
 // use App\Http\Controllers\AuthController;
@@ -81,3 +81,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pemesanan-langsung', [PemesananLangsungController::class, 'store']);
 });
 
+Route::post('/payment/snap-token', [MidtransController::class, 'getSnapToken']);
+Route::post('/payment/notification', [MidtransController::class, 'handleNotification']);
