@@ -85,8 +85,6 @@ class ReservasiController extends Controller
         }
     }
 
-
-
     public function show($id)
     {
         $reservasi = Reservasi::with(['pesanan', 'pengguna'])->find($id);
@@ -101,5 +99,34 @@ class ReservasiController extends Controller
             'status' => true,
             'data' => $reservasi
         ]);
+    }
+
+    public function detailPembayaran($id)
+    {
+        try {
+            $reservasi = Reservasi::with([
+                'pengguna:id,nama,email',
+                'meja:id,nomor,kapasitas',
+                'pesanan.menu:id,nama,harga'
+            ])->where('id', $id)->first();
+
+            if (!$reservasi) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Reservasi tidak ditemukan'
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Detail reservasi berhasil diambil',
+                'data' => $reservasi
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
