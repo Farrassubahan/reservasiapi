@@ -129,4 +129,30 @@ class ReservasiController extends Controller
             ], 500);
         }
     }
+
+     public function verifikasiKehadiran(Request $request)
+    {
+        $request->validate([
+            'kode_reservasi' => 'required|string|exists:reservasi,kode_reservasi',
+        ]);
+
+        $reservasi = Reservasi::where('kode_reservasi', $request->kode_reservasi)->first();
+
+        if (!$reservasi) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Kode reservasi tidak ditemukan.'
+            ], 404);
+        }
+
+        // Ubah status jadi "diterima"
+        $reservasi->status = 'diterima';
+        $reservasi->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Reservasi berhasil diverifikasi.',
+            'data' => $reservasi
+        ]);
+    }
 }

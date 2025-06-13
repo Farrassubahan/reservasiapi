@@ -7,7 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\HistoriController;
 use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\API\ReservasiController;
+use App\Http\Controllers\Api\ReservasiController;
 use App\Http\Controllers\API\Pelayan\mejaPelayan;
 use App\Http\Controllers\API\Pelayan\HistoryPelayan;
 use App\Http\Controllers\API\Pelayan\KehadiranReservasi;
@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reservasi/{id}', [ReservasiController::class, 'show']);
     // buat ambil data reservasi di halaman payment
     Route::get('/reservasi/{id}/detail-pembayaran', [ReservasiController::class, 'detailPembayaran']);
+    Route::post('/verifikasi-kehadiran', [ReservasiController::class, 'verifikasiKehadiran']);
 });
 
 
