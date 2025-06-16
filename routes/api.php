@@ -15,7 +15,6 @@ use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 use App\Http\Controllers\API\Pelayan\PemesananLangsungController;
 use App\Http\Controllers\Api\MidtransController;
 
-
 // use App\Http\Controllers\AuthController;
 
 
