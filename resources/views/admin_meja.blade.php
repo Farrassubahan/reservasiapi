@@ -231,92 +231,93 @@
                         });
                 });
             </script>
+            
             {{-- script buat edit brow --}}
             <script>
-                const editModal = document.getElementById("editModal");
+                document.addEventListener('DOMContentLoaded', function() {
+                    const editModal = document.getElementById("editModal");
 
-                function tutupEditForm() {
-                    editModal.style.display = "none";
-                }
+                    // Fungsi untuk tutup modal
+                    function tutupEditForm() {
+                        editModal.style.display = "none";
+                    }
 
-                document.querySelectorAll('.btn-edit').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const id = this.getAttribute('data-id');
-                        fetch(/admin/meja / $ {
-                                id
+                    // Saat tombol edit diklik
+                    document.querySelectorAll('.btn-edit').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+
+                            fetch(`/admin/meja/${id}`)
+                                .then(res => {
+                                    if (!res.ok) throw new Error('Gagal mengambil data');
+                                    return res.json();
+                                })
+                                .then(data => {
+                                    // Isi form dengan data
+                                    document.getElementById('edit_id').value = data.id;
+                                    document.getElementById('edit_nomor').value = data.nomor;
+                                    document.getElementById('edit_area').value = data.area;
+                                    document.getElementById('edit_kapasitas').value = data.kapasitas;
+                                    document.getElementById('edit_status').value = data.status;
+
+                                    // Tampilkan modal
+                                    editModal.style.display = "block";
+                                    // Kalau pakai Bootstrap modal:
+                                    // const modal = new bootstrap.Modal(editModal);
+                                    // modal.show();
+                                })
+                                .catch(err => {
+                                    alert('Gagal memuat data meja: ' + err.message);
+                                });
+                        });
+                    });
+
+                    // Saat form submit
+                    document.getElementById('editMejaForm').addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        const id = document.getElementById('edit_id').value;
+                        const formData = new FormData(this);
+
+                        fetch(`/admin/meja/${id}`, {
+                                method: 'POST', // tetap POST karena kita override ke PUT
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'X-HTTP-Method-Override': 'PUT',
+                                    'Accept': 'application/json'
+                                },
+                                body: formData
                             })
                             .then(res => {
-                                if (!res.ok) throw new Error('Gagal mengambil data');
+                                if (!res.ok) return res.json().then(err => Promise.reject(err));
                                 return res.json();
                             })
                             .then(data => {
-                                document.getElementById('edit_id').value = data.id;
-                                document.getElementById('edit_nomor').value = data.nomor;
-                                document.getElementById('edit_area').value = data.area;
-                                document.getElementById('edit_kapasitas').value = data.kapasitas;
-                                document.getElementById('edit_status').value = data.status;
-                                editModal.style.display = "block";
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: data.message || 'Data meja berhasil diperbarui',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                                tutupEditForm();
+                                setTimeout(() => location.reload(), 2100);
                             })
                             .catch(err => {
-                                alert('Gagal memuat data meja: ' + err.message);
-                            });
-                    });
-                });
-
-                document.getElementById('editMejaForm').addEventListener('submit', function(e) {
-                    e.preventDefault();
-
-                    const id = document.getElementById('edit_id').value;
-                    const formData = new FormData(this);
-
-                    fetch(/admin/meja / $ {
-                            id
-                        }, {
-                            method: "POST",
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json',
-                                'X-HTTP-Method-Override': 'PUT',
-                            },
-                            body: formData
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                return response.json().then(err => Promise.reject(err));
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: data.message || 'Data meja berhasil diperbarui',
-                                timer: 2000,
-                                showConfirmButton: false,
-                            });
-                            tutupEditForm();
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2100);
-                        })
-                        .catch(error => {
-                            if (error.errors) {
-                                const messages = Object.values(error.errors).flat().join('<br>');
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    html: messages,
-                                });
-                            } else {
+                                let pesan = 'Terjadi kesalahan.';
+                                if (err.errors) {
+                                    pesan = Object.values(err.errors).flat().join('<br>');
+                                }
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Gagal',
-                                    text: 'Terjadi kesalahan.',
+                                    html: pesan
                                 });
-                            }
-                        });
+                            });
+                    });
                 });
             </script>
+
 
             {{-- allert hapus --}}
             <script>
