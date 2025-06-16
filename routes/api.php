@@ -8,11 +8,11 @@ use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\HistoriController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ReservasiController;
-use App\Http\Controllers\API\Pelayan\mejaPelayan;
-use App\Http\Controllers\API\Pelayan\HistoryPelayan;
-use App\Http\Controllers\API\Pelayan\KehadiranReservasi;
+use App\Http\Controllers\Api\Pelayan\mejaPelayan;
+use App\Http\Controllers\Api\Pelayan\HistoryPelayan;
+use App\Http\Controllers\Api\Pelayan\KehadiranReservasi;
 use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
-use App\Http\Controllers\API\Pelayan\PemesananLangsungController;
+use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
 use App\Http\Controllers\Api\MidtransController;
 
 // use App\Http\Controllers\AuthController;
