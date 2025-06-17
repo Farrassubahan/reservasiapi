@@ -11,6 +11,10 @@ use App\Models\Menu;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
+// use Illuminate\Http\Request;
+// use App\Models\Reservasi;
+use Carbon\Carbon;
+
 class ReservasiController extends Controller
 {
     public function buatReservasi(Request $request)
@@ -130,7 +134,7 @@ class ReservasiController extends Controller
         }
     }
 
-     public function verifikasiKehadiran(Request $request)
+    public function verifikasiKehadiran(Request $request)
     {
         $request->validate([
             'kode_reservasi' => 'required|string|exists:reservasi,kode_reservasi',
@@ -153,6 +157,91 @@ class ReservasiController extends Controller
             'status' => true,
             'message' => 'Reservasi berhasil diverifikasi.',
             'data' => $reservasi
+        ]);
+    }
+
+
+// buat ambil data jam
+    public function getSesiTersedia(Request $request)
+    {
+        $tanggal = $request->query('tanggal');
+
+        if (!$tanggal) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tanggal wajib diisi'
+            ], 400);
+        }
+
+        $tanggalWib = Carbon::parse($tanggal)->timezone('Asia/Jakarta')->toDateString();
+        $now = Carbon::now('Asia/Jakarta');
+
+        $sesiList = [
+            [
+                'label' => 'Sarapan',
+                'jamList' => [
+                    ['key' => 'sarapan_1', 'label' => '07:00 - 10:00', 'mulai' => '07:00', 'selesai' => '10:00'],
+                    ['key' => 'sarapan_2', 'label' => '10:00 - 12:00', 'mulai' => '10:00', 'selesai' => '12:00'],
+                ]
+            ],
+            [
+                'label' => 'Makan Siang',
+                'jamList' => [
+                    ['key' => 'siang_1', 'label' => '12:00 - 14:00', 'mulai' => '12:00', 'selesai' => '14:00'],
+                    ['key' => 'siang_2', 'label' => '14:00 - 17:00', 'mulai' => '14:00', 'selesai' => '17:00'],
+                ]
+            ],
+            [
+                'label' => 'Makan Malam',
+                'jamList' => [
+                    ['key' => 'malam_1', 'label' => '17:00 - 19:00', 'mulai' => '17:00', 'selesai' => '19:00'],
+                    ['key' => 'malam_2', 'label' => '19:00 - 22:00', 'mulai' => '19:00', 'selesai' => '22:00'],
+                ]
+            ]
+        ];
+
+        $maksimalKuota = 12;
+        $hasil = [];
+
+        foreach ($sesiList as $kategori) {
+            $kategoriData = [
+                'label' => $kategori['label'],
+                'jamList' => []
+            ];
+
+            foreach ($kategori['jamList'] as $jam) {
+                $sesi = $jam['key'];
+                $mulai = Carbon::parse($tanggalWib . ' ' . $jam['mulai'], 'Asia/Jakarta');
+                $selesai = Carbon::parse($tanggalWib . ' ' . $jam['selesai'], 'Asia/Jakarta');
+
+                // Lewati sesi yang sudah lewat
+                if ($now->greaterThan($selesai)) {
+                    continue;
+                }
+
+                // Hitung jumlah reservasi per sesi
+                $jumlahReservasi = Reservasi::where('tanggal', $tanggalWib)
+                    ->where('sesi', $sesi)
+                    ->whereIn('status', ['menunggu', 'diterima'])
+                    ->count();
+
+                if ($jumlahReservasi < $maksimalKuota) {
+                    $kategoriData['jamList'][] = [
+                        'key' => $sesi,
+                        'label' => $jam['label'],
+                        'tersedia' => max(0, $maksimalKuota - $jumlahReservasi)
+                    ];
+                }
+            }
+
+            if (!empty($kategoriData['jamList'])) {
+                $hasil[] = $kategoriData;
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $hasil
         ]);
     }
 }

@@ -101,6 +101,7 @@
                                 <option value="">Pilih Kategori</option>
                                 <option value="makanan">Makanan</option>
                                 <option value="minuman">Minuman</option>
+                                <option value="snack">Snack</option>
                             </select>
                             <label for="deskripsi">Deskripsi</label>
                             <textarea id="deskripsi" name="deskripsi" rows="4" required style="width: 100%;"></textarea>
@@ -152,6 +153,7 @@
                             <option value="">Pilih Kategori</option>
                             <option value="makanan">Makanan</option>
                             <option value="minuman">Minuman</option>
+                            <option value="snack">Snack</option>
                         </select>
 
                         <label for="edit_deskripsi">Deskripsi</label>
