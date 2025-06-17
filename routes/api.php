@@ -14,8 +14,9 @@ use App\Http\Controllers\Api\Pelayan\KehadiranReservasi;
 use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
 use App\Http\Controllers\Api\MidtransController;
-
 // use App\Http\Controllers\AuthController;
+
+Route::get('/reservasi/sesi-tersedia', [ReservasiController::class, 'getSesiTersedia']);
 
 
 
@@ -24,6 +25,7 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle']);
     Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+    Route::post('/update-password', [AuthController::class, 'updatePassword']);
 });
 
 Route::get('/menu', [MenuController::class, 'index']);
@@ -47,6 +49,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/verifikasi-kehadiran', [ReservasiController::class, 'verifikasiKehadiran']);
 });
 
+// Route::get('/reservasi/jumlah-meja', [ReservasiController::class, 'getJumlahMeja']);
+
 
 
 /* 
@@ -59,9 +63,11 @@ Route::middleware('auth:sanctum')->group(function () {
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
 Route::middleware('auth:sanctum')->group(function () {
-    // Profile
     Route::get('/profile', [ProfileController::class, 'show']);
+    // Profile
     Route::put('/profile', [ProfileController::class, 'update']);
 
     // Pelayan - Reservasi

@@ -29,8 +29,8 @@ class PelayanReservasiController extends Controller
                 ];
             });
 
-        // Ambil data meja yang tersedia (status 'tersedia')
-        $meja = Meja::where('status', 'tersedia')->get();
+        // Ambil semua data meja, tidak peduli status
+        $meja = Meja::orderBy('nomor')->get();
 
         return response()->json([
             'status' => true,
@@ -41,6 +41,7 @@ class PelayanReservasiController extends Controller
             ],
         ]);
     }
+
 
     // // Detail reservasi berdasarkan ID
     // public function show($reservasiId)
