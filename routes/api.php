@@ -15,9 +15,13 @@ use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
 use App\Http\Controllers\Api\MidtransController;
 // use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\RatingPegawaiController;
+
+
 
 Route::get('/reservasi/sesi-tersedia', [ReservasiController::class, 'getSesiTersedia']);
 
+Route::post('/rating-pegawai', [RatingPegawaiController::class, 'store']);
 
 
 Route::middleware('throttle:10,1')->group(function () {
@@ -47,6 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // buat ambil data reservasi di halaman payment
     Route::get('/reservasi/{id}/detail-pembayaran', [ReservasiController::class, 'detailPembayaran']);
     Route::post('/verifikasi-kehadiran', [ReservasiController::class, 'verifikasiKehadiran']);
+    Route::put('/absen/{kode_reservasi}', [ReservasiController::class, 'absen']);
 });
 
 // Route::get('/reservasi/jumlah-meja', [ReservasiController::class, 'getJumlahMeja']);

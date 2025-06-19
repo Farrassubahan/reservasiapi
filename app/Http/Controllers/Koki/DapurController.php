@@ -36,23 +36,14 @@ class DapurController extends Controller
             'status' => 'required|in:menunggu,diproses,siap,disajikan,dibatalkan'
         ]);
 
-        $pesanan = Pesanan::findOrFail($id);
+        $pesanan = Pesanan::with('reservasi')->findOrFail($id);
         $pesanan->status = $validated['status'];
         $pesanan->save();
 
-        // Tambahan: Jika status adalah "siap" atau "disajikan", simpan ke rating_kokis
-        if (in_array($pesanan->status, ['siap', 'disajikan'])) {
-            $sudahAda = RatingKoki::where('pesanan_id', $pesanan->id)->exists();
-
-            if (!$sudahAda) {
-                RatingKoki::create([
-                    'pesanan_id' => $pesanan->id,
-                    'koki_id' => Auth::id(), // ID koki yang login
-                    'rating' => 5, // default awal
-                    'komentar' => null,
-                    'tanggal' => now(),
-                ]);
-            }
+        // Simpan koki_id di reservasi kalau belum ada
+        if (is_null($pesanan->reservasi->koki_id)) {
+            $pesanan->reservasi->koki_id = Auth::id();
+            $pesanan->reservasi->save();
         }
 
         return redirect()->route('koki.pesanan')->with('success', 'Status berhasil diperbarui');

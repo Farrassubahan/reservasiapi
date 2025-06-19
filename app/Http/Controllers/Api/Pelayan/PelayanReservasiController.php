@@ -7,6 +7,7 @@ use App\Models\Reservasi;
 use App\Models\Meja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PelayanReservasiController extends Controller
 {
@@ -41,41 +42,6 @@ class PelayanReservasiController extends Controller
             ],
         ]);
     }
-
-
-    // // Detail reservasi berdasarkan ID
-    // public function show($reservasiId)
-    // {
-    //     $reservasi = Reservasi::with(['pengguna:id,nama', 'meja'])->find($reservasiId);
-
-    //     if (!$reservasi) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Reservasi tidak ditemukan',
-    //         ], 404);
-    //     }
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'Detail reservasi',
-    //         'data' => [
-    //             'id' => $reservasi->id,
-    //             'nama_pengguna' => $reservasi->pengguna->nama ?? 'Tidak diketahui',
-    //             'sesi' => $reservasi->sesi,
-    //             'tanggal' => $reservasi->tanggal,
-    //             'jumlah_tamu' => $reservasi->jumlah_tamu,
-    //             'status' => $reservasi->status,
-    //             'meja' => $reservasi->meja->map(function ($m) {
-    //                 return [
-    //                     'id' => $m->id,
-    //                     'nama' => $m->nama,
-    //                     'kapasitas' => $m->kapasitas,
-    //                     'status' => $m->status,
-    //                 ];
-    //             }),
-    //         ],
-    //     ]);
-    // }
 
     public function show($reservasiId)
     {
@@ -122,6 +88,54 @@ class PelayanReservasiController extends Controller
         ]);
     }
 
+    // public function konfirmasiMeja(Request $request, $reservasiId)
+    // {
+    //     $request->validate([
+    //         'meja_id' => 'required|exists:meja,id',
+    //     ]);
+
+    //     $mejaId = $request->input('meja_id');
+
+    //     $reservasi = Reservasi::find($reservasiId);
+    //     if (!$reservasi) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Reservasi tidak ditemukan',
+    //         ], 404);
+    //     }
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         // Simpan relasi meja ke reservasi (pivot)
+    //         $reservasi->meja()->syncWithoutDetaching([$mejaId]);
+
+    //         // Jangan update status reservasi di sini
+    //         // $reservasi->status = 'diterima';
+    //         // $reservasi->save();
+
+    //         // Update status meja jadi 'digunakan'
+    //         $meja = Meja::find($mejaId);
+    //         if ($meja->status !== 'digunakan') {
+    //             $meja->status = 'digunakan';
+    //             $meja->save();
+    //         }
+
+    //         DB::commit();
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => 'Meja berhasil dikonfirmasi untuk reservasi',
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Gagal mengonfirmasi meja: ' . $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+
     public function konfirmasiMeja(Request $request, $reservasiId)
     {
         $request->validate([
@@ -144,9 +158,11 @@ class PelayanReservasiController extends Controller
             // Simpan relasi meja ke reservasi (pivot)
             $reservasi->meja()->syncWithoutDetaching([$mejaId]);
 
-            // Jangan update status reservasi di sini
-            // $reservasi->status = 'diterima';
-            // $reservasi->save();
+            // Simpan pelayan_id jika belum ada
+            if (is_null($reservasi->pelayan_id)) {
+                $reservasi->pelayan_id = Auth::id(); // pelayan yang login
+                $reservasi->save();
+            }
 
             // Update status meja jadi 'digunakan'
             $meja = Meja::find($mejaId);
