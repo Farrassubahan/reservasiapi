@@ -19,7 +19,14 @@ class HistoriController extends Controller
             ], 401);
         }
 
-        $histori = Reservasi::with(['meja', 'pesanan.menu', 'pelayan', 'ratingPelayan'])
+        $histori = Reservasi::with([
+            'meja',
+            'pesanan.menu',
+            'pelayan',
+            'koki',
+            'ratingPelayan',
+            'ratingKoki'
+        ])
             ->where('pengguna_id', $user->id)
             ->orderBy('tanggal', 'desc')
             ->get();
@@ -27,7 +34,7 @@ class HistoriController extends Controller
         $histori->transform(function ($reservasi) {
             $totalHarga = 0;
             foreach ($reservasi->pesanan as $pesanan) {
-                $hargaMenu = optional($pesanan->menu)->harga ?? 0;
+                $hargaMenu = optional($pesanan->menu)->harga ?? (float)$pesanan->harga_snapshot;
                 $jumlahPesanan = $pesanan->jumlah ?? 1;
                 $totalHarga += $hargaMenu * $jumlahPesanan;
             }
@@ -57,7 +64,9 @@ class HistoriController extends Controller
             'pembayaran',
             'meja',
             'pelayan',
-            'ratingPelayan'
+            'koki',
+            'ratingPelayan',
+            'ratingKoki'
         ])
             ->where('id', $id)
             ->where('pengguna_id', $user->id)
@@ -73,24 +82,40 @@ class HistoriController extends Controller
         $totalHarga = 0;
         $data = $reservasi->toArray();
 
-        // Kirim snapshot nama pengguna (bukan dari relasi pengguna lagi)
+        // Tambahkan data pengguna
         $data['pengguna'] = [
             'id' => $reservasi->pengguna_id,
-            'nama' => $reservasi->nama_pengguna_snapshot,
+            'nama' => $reservasi->pengguna->nama ?? null,
             'email' => $reservasi->pengguna->email ?? null
         ];
 
-        // Siapkan pesanan dengan snapshot menu
+        // Tambahkan data pelayan
+        $data['pelayan'] = $reservasi->pelayan ? [
+            'id' => $reservasi->pelayan->id,
+            'nama' => $reservasi->pelayan->nama,
+            'email' => $reservasi->pelayan->email
+        ] : null;
+
+        // Tambahkan data koki
+        $data['koki'] = $reservasi->koki ? [
+            'id' => $reservasi->koki->id,
+            'nama' => $reservasi->koki->nama,
+            'email' => $reservasi->koki->email
+        ] : null;
+
+        // Hitung total harga
         foreach ($reservasi->pesanan as $index => $pesanan) {
-            $harga = (float) $pesanan->harga_snapshot;
+            $harga = (float) ($pesanan->harga_snapshot ?? optional($pesanan->menu)->harga ?? 0);
             $jumlah = $pesanan->jumlah ?? 1;
             $totalItem = $harga * $jumlah;
 
             $data['pesanan'][$index]['harga'] = $harga;
             $data['pesanan'][$index]['total_harga_item'] = $totalItem;
+
+            // Isi data menu snapshot
             $data['pesanan'][$index]['menu'] = [
                 'id' => $pesanan->menu_id,
-                'nama' => $pesanan->nama_menu_snapshot,
+                'nama' => $pesanan->nama_menu_snapshot ?? optional($pesanan->menu)->nama,
                 'harga' => $harga
             ];
 

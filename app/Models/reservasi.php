@@ -15,35 +15,55 @@ class Reservasi extends Model
         'tanggal',
         'jumlah_tamu',
         'status',
-        'pelayan_id' 
+        'pelayan_id',
+        'koki_id'
     ];
 
+    // Relasi pengguna yang buat reservasi
     public function pengguna()
     {
         return $this->belongsTo(Pengguna::class, 'pengguna_id');
     }
 
-    public function meja()
-    {
-        return $this->belongsToMany(Meja::class, 'reservasi_meja', 'reservasi_id', 'meja_id');
-    }
-
-    public function pesanan()
-    {
-        return $this->hasMany(Pesanan::class);
-    }
-
+    // Relasi pelayan
     public function pelayan()
     {
         return $this->belongsTo(Pengguna::class, 'pelayan_id');
     }
 
-    public function ratingPelayan()
+    // Relasi koki
+    public function koki()
     {
-        return $this->hasOne(RatingPelayan::class, 'reservasi_id');
+        return $this->belongsTo(Pengguna::class, 'koki_id');
     }
+
+    // Relasi meja (many-to-many)
+    public function meja()
+    {
+        return $this->belongsToMany(Meja::class, 'reservasi_meja', 'reservasi_id', 'meja_id');
+    }
+
+    // Relasi pesanan
+    public function pesanan()
+    {
+        return $this->hasMany(Pesanan::class);
+    }
+
+    // Relasi pembayaran
     public function pembayaran()
     {
         return $this->hasOne(Pembayaran::class, 'reservasi_id');
+    }
+
+    // Relasi rating pelayan
+    public function ratingPelayan()
+    {
+        return $this->hasMany(RatingPegawai::class)->where('tipe', 'pelayan');
+    }
+
+    // Relasi rating koki
+    public function ratingKoki()
+    {
+        return $this->hasMany(RatingPegawai::class)->where('tipe', 'koki');
     }
 }

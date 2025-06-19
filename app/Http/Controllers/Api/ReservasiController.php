@@ -161,7 +161,7 @@ class ReservasiController extends Controller
     }
 
 
-// buat ambil data jam
+    // buat ambil data jam
     public function getSesiTersedia(Request $request)
     {
         $tanggal = $request->query('tanggal');
@@ -243,5 +243,19 @@ class ReservasiController extends Controller
             'status' => true,
             'data' => $hasil
         ]);
+    }
+
+    public function absen($kode_reservasi)
+    {
+        $reservasi = Reservasi::where('kode_reservasi', $kode_reservasi)->first();
+
+        if (!$reservasi) {
+            return response()->json(['status' => false, 'message' => 'Reservasi tidak ditemukan.'], 404);
+        }
+
+        $reservasi->status = 'diterima';
+        $reservasi->save();
+
+        return response()->json(['status' => true, 'message' => 'Reservasi ditandai hadir.']);
     }
 }

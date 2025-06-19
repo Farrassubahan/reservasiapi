@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('reservasi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pengguna_id')->constrained('pengguna')->onDelete('cascade');
+            $table->foreignId('pelayan_id')->nullable()->constrained('pengguna')->nullOnDelete();
+            $table->foreignId('koki_id')->nullable()->constrained('pengguna')->nullOnDelete();
             $table->string('kode_reservasi')->unique();
             $table->enum('sesi', ['sarapan_1', 'sarapan_2', 'siang_1', 'siang_2', 'malam_1', 'malam_2']);
             $table->date('tanggal');
@@ -24,10 +26,10 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations. 
+     * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservasis'); 
+        Schema::dropIfExists('reservasi');
     }
 };
