@@ -34,4 +34,26 @@ class PesananController extends Controller
             'data' => $pesanan
         ], 201);
     }
+    public function statusTerbaru(Request $request)
+    {
+        $pengguna_id = $request->query('pengguna_id');
+
+        if (!$pengguna_id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'pengguna_id wajib diisi'
+            ], 400);
+        }
+
+        $pesanan = Pesanan::with('menu')
+            ->where('pengguna_id', $pengguna_id)
+            ->orderBy('updated_at', 'desc')
+            ->take(5)
+            ->get(['id', 'menu_id', 'status', 'updated_at']);
+
+        return response()->json([
+            'status' => true,
+            'data' => $pesanan
+        ]);
+    }
 }
