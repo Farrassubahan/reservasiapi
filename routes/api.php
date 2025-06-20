@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
 use App\Http\Controllers\Api\MidtransController;
 // use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\RatingPegawaiController;
+use App\Http\Controllers\Api\notifController;
+use App\Http\Controllers\Pelayan\PesananController;
 
 
 
@@ -52,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reservasi/{id}/detail-pembayaran', [ReservasiController::class, 'detailPembayaran']);
     Route::post('/verifikasi-kehadiran', [ReservasiController::class, 'verifikasiKehadiran']);
     Route::put('/absen/{kode_reservasi}', [ReservasiController::class, 'absen']);
+    Route::get('/reservasi/{id}/status-pesanan', [ReservasiController::class, 'getStatusPesanan']);
 });
 
 // Route::get('/reservasi/jumlah-meja', [ReservasiController::class, 'getJumlahMeja']);
@@ -75,6 +78,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Profile
     Route::put('/profile', [ProfileController::class, 'update']);
 
+    // notif pesanan
+    Route::get('/pesanan/status-terbaru', [PesananController::class, 'statusTerbaru']);
+
     // Pelayan - Reservasi
     Route::get('/pelayan/reservasi', [PelayanReservasiController::class, 'index']);
     Route::get('/pelayan/reservasi/{reservasiId}', [PelayanReservasiController::class, 'show']);
@@ -95,7 +101,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pemesanan-langsung', [PemesananLangsungController::class, 'store']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
     Route::post('/midtrans/token', [MidtransController::class, 'getSnapToken']);
     Route::post('/midtrans/notification', [MidtransController::class, 'handleNotification']);
 });
+
+    Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/reservasi/{id}/status', [notifController::class, 'updateReservasiStatus']);
+    Route::post('/pesanan/{id}/status', [notifController::class, 'updatePesananStatus']);
+    Route::get('/notifikasi', [notifController::class, 'getNotifikasi']);
+    Route::post('/notifikasi/{id}/dibaca', [notifController::class, 'tandaiDibaca']);
+});
+

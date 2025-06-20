@@ -258,4 +258,56 @@ class ReservasiController extends Controller
 
         return response()->json(['status' => true, 'message' => 'Reservasi ditandai hadir.']);
     }
+    public function cekStatusPesanan($id)
+    {
+        $reservasi = Reservasi::with('pesanan')->find($id);
+
+        if (!$reservasi) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Reservasi tidak ditemukan.'
+            ], 404);
+        }
+
+        // Ambil semua status pesanan dalam reservasi
+        $statusPesanan = $reservasi->pesanan->pluck('status');
+
+        // Contoh logika: jika semua status "siap"
+        if ($statusPesanan->every(fn($s) => $s === 'siap')) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Semua pesanan sudah siap.',
+                'data' => [
+                    'status' => 'siap',
+                    'pesanan' => $reservasi->pesanan
+                ]
+            ]);
+        }
+
+        // Jika masih ada yang belum siap
+        return response()->json([
+            'status' => true,
+            'message' => 'Pesanan masih diproses.',
+            'data' => [
+                'status' => 'diproses',
+                'pesanan' => $reservasi->pesanan
+            ]
+        ]);
+    }
+    public function getStatusPesanan($id)
+    {
+        $reservasi = Reservasi::find($id);
+
+        if (!$reservasi) {
+            return response()->json([
+                'message' => 'Reservasi tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => [
+                'status' => $reservasi->status
+            ]
+        ]);
+    }
 }
