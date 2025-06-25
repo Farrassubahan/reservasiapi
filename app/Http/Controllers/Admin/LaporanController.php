@@ -9,29 +9,22 @@ use App\Models\Reservasi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil bulan dari request, default ke bulan saat ini
         $bulanDipilih = $request->input('bulan', Carbon::now()->month); // angka 1-12
-        $tahunDipilih = $request->input('tahun') ?? Carbon::now()->year; // default tahun sekarang
+        $tahunDipilih = $request->input('tahun') ?? Carbon::now()->year;
 
-
-        // Range tanggal berdasarkan bulan yang dipilih
         $startOfSelectedMonth = Carbon::create($tahunDipilih, $bulanDipilih, 1)->startOfDay();
         $endOfSelectedMonth = Carbon::create($tahunDipilih, $bulanDipilih, 1)->endOfMonth()->endOfDay();
 
-
-        // Hari ini
         $today = Carbon::today();
-
-        // Awal dan akhir minggu ini
         $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
         $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY);
 
-        // Logging untuk debugging
         Log::info('Hari ini:', ['today' => $today]);
         $latestReservasi = Reservasi::latest()->first();
         if ($latestReservasi) {
@@ -46,7 +39,6 @@ class LaporanController extends Controller
             $endOfSelectedMonth
         ])->where('status', '!=', 'dibatalkan')->get();
 
-        // Contoh filter minggu: bisa kamu sesuaikan jika mau ikut filter bulan juga
         $reservasiMingguIni = Reservasi::whereBetween('tanggal', [
             $startOfSelectedMonth,
             $endOfSelectedMonth
@@ -74,48 +66,51 @@ class LaporanController extends Controller
         }
 
         // === Performa Koki ===
-        $koki = Pengguna::where('role', 'koki')
-            ->get()
-            ->map(function ($pengguna) use ($startOfSelectedMonth, $endOfSelectedMonth) {
-                $jumlahPesanan = DB::table('rating_kokis')
-                    ->where('koki_id', $pengguna->id)
-                    ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
-                    ->count();
+        $koki = Pengguna::where('role', 'koki')->get()->map(function ($pengguna) use ($startOfSelectedMonth, $endOfSelectedMonth) {
+            $jumlahRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'koki')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->count();
 
-                $rataRating = DB::table('rating_kokis')
-                    ->where('koki_id', $pengguna->id)
-                    ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
-                    ->avg('rating');
+            $rataRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'koki')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->avg('rating');
 
-                return [
-                    'nama' => $pengguna->nama,
-                    'jumlah_pesanan' => $jumlahPesanan,
-                    'rata_rating' => $rataRating ? round($rataRating, 1) : '-',
-                ];
-            });
+            $persentase = $rataRating ? round(($rataRating / 5) * 100, 2) : 0;
 
-        // === Performa Pelayan ===
-        $pelayan = Pengguna::where('role', 'pelayan')
-            ->get()
-            ->map(function ($pengguna) use ($startOfSelectedMonth, $endOfSelectedMonth) {
-                // Hitung jumlah rating sebagai proxy jumlah pelayanan
-                $jumlahPelayanan = DB::table('rating_pelayans')
-                    ->where('pelayan_id', $pengguna->id)
-                    ->whereBetween('tanggal', [$startOfSelectedMonth, $endOfSelectedMonth])
-                    ->count();
+            return [
+                'nama' => $pengguna->nama,
+                'jumlah_rating' => $jumlahRating,
+                'rata_rating' => $rataRating ? round($rataRating, 2) : '-',
+                'persentase_rating' => $persentase . '%',
+            ];
+        });
 
-                $rataRating = DB::table('rating_pelayans')
-                    ->where('pelayan_id', $pengguna->id)
-                    ->whereBetween('tanggal', [$startOfSelectedMonth, $endOfSelectedMonth])
-                    ->avg('rating');
+        $pelayan = Pengguna::where('role', 'pelayan')->get()->map(function ($pengguna) use ($startOfSelectedMonth, $endOfSelectedMonth) {
+            $jumlahRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'pelayan')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->count();
 
-                return [
-                    'nama' => $pengguna->nama,
-                    'jumlah_reservasi' => $jumlahPelayanan,
-                    'rata_rating' => $rataRating ? round($rataRating, 1) : '-',
-                ];
-            });
+            $rataRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'pelayan')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->avg('rating');
 
+            $persentase = $rataRating ? round(($rataRating / 5) * 100, 2) : 0;
+
+            return [
+                'nama' => $pengguna->nama,
+                'jumlah_rating' => $jumlahRating,
+                'rata_rating' => $rataRating ? round($rataRating, 2) : '-',
+                'persentase_rating' => $persentase . '%',
+            ];
+        });
 
         // === Menu Terlaris ===
         $menuTerlaris = DB::table('pesanan as p')
@@ -128,6 +123,14 @@ class LaporanController extends Controller
             ->limit(3)
             ->get();
 
+        // === Pendapatan Bulanan ===
+        $totalPendapatan = DB::table('pesanan as p')
+            ->join('menu as m', 'p.menu_id', '=', 'm.id')
+            ->where('p.status', 'siap')
+            ->whereBetween('p.created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+            ->selectRaw('SUM(p.jumlah * m.harga) as total')
+            ->value('total') ?? 0;
+
         return view('admin_laporan', compact(
             'reservasiHariIni',
             'reservasiMingguIni',
@@ -137,7 +140,94 @@ class LaporanController extends Controller
             'koki',
             'pelayan',
             'menuTerlaris',
-            'bulanDipilih' // Agar bisa ditandai di <select>
+            'bulanDipilih',
+            'totalPendapatan'
         ));
+    }
+
+    // pdf 
+    public function exportPDF(Request $request)
+    {
+        $bulanDipilih = $request->input('bulan', Carbon::now()->month);
+        $tahunDipilih = $request->input('tahun', Carbon::now()->year);
+
+        $startOfSelectedMonth = Carbon::create($tahunDipilih, $bulanDipilih, 1)->startOfDay();
+        $endOfSelectedMonth = Carbon::create($tahunDipilih, $bulanDipilih, 1)->endOfMonth()->endOfDay();
+
+        $reservasiBulanIni = Reservasi::whereBetween('tanggal', [$startOfSelectedMonth, $endOfSelectedMonth])
+            ->where('status', '!=', 'dibatalkan')->count();
+
+        $pelangganBaru = Pengguna::where('role', 'pelanggan')
+            ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+            ->count();
+
+        $totalPendapatan = DB::table('pesanan as p')
+            ->join('menu as m', 'p.menu_id', '=', 'm.id')
+            ->where('p.status', 'siap')
+            ->whereBetween('p.created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+            ->selectRaw('SUM(p.jumlah * m.harga) as total')
+            ->value('total') ?? 0;
+
+        $koki = Pengguna::where('role', 'koki')->get()->map(function ($pengguna) use ($startOfSelectedMonth, $endOfSelectedMonth) {
+            $jumlahRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'koki')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->count();
+
+            $rataRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'koki')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->avg('rating');
+
+            return [
+                'nama' => $pengguna->nama,
+                'jumlah_rating' => $jumlahRating,
+                'rata_rating' => $rataRating ? round($rataRating, 2) : '-',
+            ];
+        });
+
+        $pelayan = Pengguna::where('role', 'pelayan')->get()->map(function ($pengguna) use ($startOfSelectedMonth, $endOfSelectedMonth) {
+            $jumlahRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'pelayan')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->count();
+
+            $rataRating = DB::table('rating_pegawai')
+                ->where('pegawai_id', $pengguna->id)
+                ->where('tipe', 'pelayan')
+                ->whereBetween('created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+                ->avg('rating');
+
+            return [
+                'nama' => $pengguna->nama,
+                'jumlah_rating' => $jumlahRating,
+                'rata_rating' => $rataRating ? round($rataRating, 2) : '-',
+            ];
+        });
+
+        $menuTerlaris = DB::table('pesanan as p')
+            ->join('menu as m', 'p.menu_id', '=', 'm.id')
+            ->whereIn('p.status', ['siap', 'disajikan'])
+            ->whereBetween('p.created_at', [$startOfSelectedMonth, $endOfSelectedMonth])
+            ->select('m.nama as nama_menu', DB::raw('SUM(p.jumlah) as total_terjual'))
+            ->groupBy('p.menu_id', 'm.nama')
+            ->orderByDesc('total_terjual')
+            ->limit(3)
+            ->get();
+
+        $pdf = Pdf::loadView('pdf', compact(
+            'bulanDipilih',
+            'tahunDipilih',
+            'reservasiBulanIni',
+            'pelangganBaru',
+            'totalPendapatan',
+            'koki',
+            'pelayan',
+            'menuTerlaris'
+        ));
+        return $pdf->download('laporan-bulanan.pdf');
     }
 }
