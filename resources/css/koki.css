@@ -665,10 +665,20 @@ button {
 
 .performa-section {
   display: flex;
-  flex-direction: column;
-  padding: 1rem 20px;
-  gap: 1rem;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap; /* biar responsive di layar kecil */
+  margin-top: 7rem; 
 }
+
+.performa-box {
+  flex: 1;
+  min-width: 300px;
+  max-width: 450px;
+}
+
 
 .performa-section table {
   width: 100%;

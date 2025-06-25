@@ -84,3 +84,7 @@ Route::middleware(['auth', 'role:Koki'])->prefix('koki')->group(function () {
     Route::put('/pesanan/{id}/status', [DapurController::class, 'updateStatus']);
 });
 
+// pdf
+Route::get('/admin/laporan/export-pdf', [LaporanController::class, 'exportPDF'])->name('admin.laporan.exportPDF');
+
+
