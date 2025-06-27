@@ -25,19 +25,14 @@ class ProfileController extends Controller
 
         return response()->json([
             'data' => [
-                'nama'      => $user->nama,
-                'email'     => $user->email,
-                'telepon'   => $user->telepon,
-                // 'role'      => $user->role,
-                'foto'      => $user->foto_url,
-                // 'google_id' => $user->google_id,
+                'nama'    => $user->nama,
+                'email'   => $user->email,
+                'telepon' => $user->telepon,
+                'foto'    => $user->foto ? url('img/foto_profile/' . $user->foto) : null,
             ]
         ], 200);
     }
 
-    /**
-     * Update profil user yang sedang login
-     */
     public function update(Request $request)
     {
         /** @var \App\Models\Pengguna $user */
@@ -47,31 +42,35 @@ class ProfileController extends Controller
             return response()->json(['message' => 'User tidak ditemukan'], 404);
         }
 
-        // ✅ Tambahkan validasi 'telepon'
         $validated = $request->validate([
             'nama'    => 'required|string|max:255',
-            'telepon' => 'required|digits_between:10,15', // ✅ validasi telepon minimal 10 digit
-            'foto'    => 'nullable|string', // base64 string
+            'telepon' => 'required|digits_between:10,15',
+            'foto'    => 'nullable|string',
         ]);
 
-        // Simpan nama dan telepon
         $user->nama = $validated['nama'];
         $user->telepon = $validated['telepon'];
 
-        // Jika ada foto baru (base64)
         if (!empty($validated['foto'])) {
             preg_match("/^data:image\/(\w+);base64,/", $validated['foto'], $type);
             $image = substr($validated['foto'], strpos($validated['foto'], ',') + 1);
             $image = base64_decode($image);
             $extension = $type[1] ?? 'jpg';
 
-            // Buat nama file unik
-            $fileName = 'foto_' . time() . '.' . $extension;
+            $fileName = md5($user->id . time()) . '.' . $extension;
 
-            // Simpan ke storage/app/public/profile
-            Storage::disk('public')->put("profile/$fileName", $image);
+            // Hapus foto lama
+            if ($user->foto && file_exists(public_path('img/foto_profile/' . $user->foto))) {
+                unlink(public_path('img/foto_profile/' . $user->foto));
+            }
 
-            // Simpan nama file ke DB
+            // Simpan ke folder public/img/foto profile/
+            $path = public_path('img/foto_profile');
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            file_put_contents($path . '/' . $fileName, $image);
             $user->foto = $fileName;
         }
 
@@ -82,7 +81,7 @@ class ProfileController extends Controller
             'data' => [
                 'nama'    => $user->nama,
                 'telepon' => $user->telepon,
-                'foto'    => $user->foto_url,
+                'foto'    => $user->foto ? url('img/foto_profile/' . $user->foto) : null,
             ]
         ]);
     }
