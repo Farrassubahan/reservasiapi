@@ -22,7 +22,7 @@ class UsmController extends Controller
             'nama' => 'required',
             'email' => 'required|email|unique:pengguna,email',
             'telepon' => ['required', 'regex:/^(\+62|62|08)\d{8,11}$/'],
-            'password' => ['required', 'min:6', 'max:16', 'regex:/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@#$%^&!?])[A-Za-z\d@#$%^&!?]{6,16}$/'],
+            'password' => ['required', 'min:6', 'max:16', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&!?])[A-Za-z\d@#$%^&!?]{6,16}$/'],
             'role' => 'required'
         ], [
             'telepon.regex' => 'Nomor telepon harus diawali +62 dan memiliki 10-13 digit angka.',
