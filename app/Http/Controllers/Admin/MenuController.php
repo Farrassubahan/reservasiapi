@@ -17,9 +17,9 @@ class MenuController extends Controller
         return view('admin_createmenu', compact('menus'));
     }
 
-
     public function store(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'kategori' => 'required|in:makanan,minuman,snack',
@@ -28,22 +28,31 @@ class MenuController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        // Jika ada file gambar di-upload
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('gambar_menu');
+            $destinationPath = public_path('img/gambar_menu'); // simpan ke folder public/img/gambar_menu
 
+            // Buat folder jika belum ada
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0755, true);
             }
 
+            // Pindahkan file ke folder tujuan
             $file->move($destinationPath, $filename);
-            $validated['gambar'] = 'gambar_menu/' . $filename; // simpan path relatif
+
+            // Simpan path relatif untuk disimpan di database
+            $validated['gambar'] = 'img/gambar_menu/' . $filename;
         }
 
+        // Tambahkan status default 'tersedia'
         $validated['tersedia'] = 'tersedia';
+
+        // Simpan ke database
         Menu::create($validated);
 
+        // Response sukses
         return response()->json([
             'message' => 'Menu berhasil ditambahkan.'
         ]);
@@ -54,7 +63,6 @@ class MenuController extends Controller
         $menu = Menu::findOrFail($id);
         return response()->json($menu);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -69,28 +77,31 @@ class MenuController extends Controller
         ]);
 
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama di folder public/gambar_menu
+            // Hapus gambar lama jika ada
             if ($menu->gambar && file_exists(public_path($menu->gambar))) {
                 File::delete(public_path($menu->gambar));
             }
 
             $file = $request->file('gambar');
             $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('gambar_menu');
+            $destinationPath = public_path('img/gambar_menu'); // ⬅️ simpan ke sini
 
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0755, true);
             }
 
             $file->move($destinationPath, $filename);
-            $validated['gambar'] = 'gambar_menu/' . $filename;
+
+            // Simpan path relatif untuk database
+            $validated['gambar'] = 'img/gambar_menu/' . $filename;
         }
 
         $menu->update($validated);
 
-        return response()->json(['message' => 'Menu berhasil diperbarui.']);
+        return response()->json([
+            'message' => 'Menu berhasil diperbarui.'
+        ]);
     }
-
 
     public function destroy($id)
     {
