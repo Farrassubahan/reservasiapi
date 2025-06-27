@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Menu;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class MenuController extends Controller
 {
@@ -14,6 +16,8 @@ class MenuController extends Controller
         $menus = Menu::all();
         return view('admin_createmenu', compact('menus'));
     }
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -21,52 +25,65 @@ class MenuController extends Controller
             'kategori' => 'required|in:makanan,minuman,snack',
             'harga' => 'required|numeric',
             'deskripsi' => 'required|string',
-            'gambar' => 'nullable|image',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-        
+
         if ($request->hasFile('gambar')) {
-            $path = $request->file('gambar')->store('gambar_menu', 'public');
-            $validated['gambar'] = $path;
+            $file = $request->file('gambar');
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('gambar_menu');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $file->move($destinationPath, $filename);
+            $validated['gambar'] = 'gambar_menu/' . $filename; // simpan path relatif
         }
-        
-        // $stokInput = (int) $request->input('stok');
-        // $validated['tersedia'] = $stokInput > 0 ? 'tersedia' : 'kosong';
+
         $validated['tersedia'] = 'tersedia';
-        
         Menu::create($validated);
-        
+
         return response()->json([
             'message' => 'Menu berhasil ditambahkan.'
         ]);
     }
-    
+
     public function edit($id)
     {
         $menu = Menu::findOrFail($id);
         return response()->json($menu);
     }
-    
+
+
     public function update(Request $request, $id)
     {
         $menu = Menu::findOrFail($id);
-        
+
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'kategori' => 'required|in:makanan,minuman',
+            'kategori' => 'required|in:makanan,minuman,snack',
             'harga' => 'required|numeric',
-            'gambar' => 'nullable|image',
             'deskripsi' => 'required|string',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
-            if ($menu->gambar && Storage::disk('public')->exists($menu->gambar)) {
-                Storage::disk('public')->delete($menu->gambar);
+            // Hapus gambar lama di folder public/gambar_menu
+            if ($menu->gambar && file_exists(public_path($menu->gambar))) {
+                File::delete(public_path($menu->gambar));
             }
 
-            // Simpan gambar baru
-            $path = $request->file('gambar')->store('gambar_menu', 'public');
-            $validated['gambar'] = $path;
+            $file = $request->file('gambar');
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('gambar_menu');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $file->move($destinationPath, $filename);
+            $validated['gambar'] = 'gambar_menu/' . $filename;
         }
 
         $menu->update($validated);
@@ -75,13 +92,13 @@ class MenuController extends Controller
     }
 
 
-
     public function destroy($id)
     {
         $menu = Menu::findOrFail($id);
 
-        if ($menu->gambar && Storage::disk('public')->exists($menu->gambar)) {
-            Storage::disk('public')->delete($menu->gambar);
+        // Hapus file gambar dari public/gambar_menu
+        if ($menu->gambar && file_exists(public_path($menu->gambar))) {
+            File::delete(public_path($menu->gambar));
         }
 
         $menu->delete();

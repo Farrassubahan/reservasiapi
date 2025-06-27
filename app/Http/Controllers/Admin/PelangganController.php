@@ -11,9 +11,13 @@ class PelangganController extends Controller
     // Menampilkan semua akun pelanggan (role = 'pelanggan')
     public function index()
     {
-        $pelanggan = Pengguna::where('role', 'pelanggan')->get();
+        $pelanggan = Pengguna::where('role', 'pelanggan')
+            ->withCount('reservasi') // <--- ini kuncinya
+            ->get();
+
         return view('admin_pelanggan', compact('pelanggan'));
     }
+
 
     // Mengupdate data pelanggan berdasarkan ID
     public function update(Request $request, $id)

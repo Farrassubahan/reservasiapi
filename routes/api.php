@@ -46,11 +46,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+// buat ambil data reservasi di halaman payment
 // reservasi
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservasi', [ReservasiController::class, 'buatReservasi']);
     Route::get('/reservasi/{id}', [ReservasiController::class, 'show']);
-    // buat ambil data reservasi di halaman payment
     Route::get('/reservasi/{id}/detail-pembayaran', [ReservasiController::class, 'detailPembayaran']);
     Route::post('/verifikasi-kehadiran', [ReservasiController::class, 'verifikasiKehadiran']);
     Route::put('/absen/{kode_reservasi}', [ReservasiController::class, 'absen']);
@@ -101,15 +101,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pemesanan-langsung', [PemesananLangsungController::class, 'store']);
 });
 
-    Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::post('/midtrans/token', [MidtransController::class, 'getSnapToken']);
     Route::post('/midtrans/notification', [MidtransController::class, 'handleNotification']);
+
+    //untuk upload bukti pembayaran manual
+    Route::post('/midtrans/upload-bukti', [MidtransController::class, 'uploadBuktiManual']);
 });
 
-    Route::middleware('auth:sanctum')->group(function () {
+
+Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservasi/{id}/status', [notifController::class, 'updateReservasiStatus']);
     Route::post('/pesanan/{id}/status', [notifController::class, 'updatePesananStatus']);
     Route::get('/notifikasi', [notifController::class, 'getNotifikasi']);
     Route::post('/notifikasi/{id}/dibaca', [notifController::class, 'tandaiDibaca']);
 });
-
