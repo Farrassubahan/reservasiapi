@@ -8,6 +8,7 @@ use App\Models\Pembayaran;
 use App\Models\Pesanan;
 use Midtrans\Snap;
 use Midtrans\Config;
+use Illuminate\Support\Str;
 
 class MidtransController extends Controller
 {
@@ -92,6 +93,48 @@ class MidtransController extends Controller
             'order_id' => $orderId,
         ]);
     }
+
+    public function uploadBuktiManual(Request $request)
+    {
+        $request->validate([
+            'pembayaran_id' => 'required|exists:pembayaran,id',
+            'bukti' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $pembayaran = Pembayaran::findOrFail($request->pembayaran_id);
+
+        // Tambahkan validasi status
+        if ($pembayaran->status !== 'menunggu') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bukti hanya bisa diupload jika status masih menunggu.',
+            ], 403);
+        }
+
+        // Simpan file ke public/img/bukti_transaksi
+        $file = $request->file('bukti');
+        $hashName = Str::random(40) . '.' . $file->getClientOriginalExtension();
+        $destinationPath = public_path('img/bukti_transaksi');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        $file->move($destinationPath, $hashName);
+
+        // Update data pembayaran
+        $pembayaran->update([
+            'bukti' => 'img/bukti_transaksi/' . $hashName,
+            'status' => 'dikonfirmasi',
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Bukti transaksi berhasil diunggah dan status diperbarui.',
+            'data' => $pembayaran,
+        ]);
+    }
+
 
     public function handleNotification(Request $request)
     {

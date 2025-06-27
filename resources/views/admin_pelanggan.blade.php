@@ -31,25 +31,26 @@
 
         <div class="main">
             <div class="header">
-                <div>
-                    <form action="{{ route('admin.pelanggan.search') }}" method="POST">
+                <div style="display: flex; justify-content: flex-start; align-items: center;">
+                    <form action="{{ route('admin.pelanggan.search') }}" method="POST"
+                        style="display: flex; gap: 8px;">
                         @csrf
                         <input type="search" name="search" placeholder="Cari Nama Pelanggan..."
-                            value="{{ old('search') }}">
+                            value="{{ old('search') }}"
+                            style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ccc; width: 200px;">
+
+                        <button type="submit"
+                            style="padding: 8px 16px; border: none; border-radius: 5px; background-color: #007bff; color: white; cursor: pointer;">
+                            Cari
+                        </button>
                     </form>
-                    @if ($pelanggan->isEmpty())
-                        <p style="text-align: center; padding: 20px;">Tidak ada pelanggan ditemukan.</p>
-                    @endif
                 </div>
-                <div>
-                    <select>
-                        <option value="" disabled selected hidden>Status</option>
-                        <option value="selesai">Selesai</option>
-                        <option value="dimasak">Batal</option>
-                        <option value="dimasak">Aktif</option>
-                    </select>
-                </div>
+
+                @if ($pelanggan->isEmpty())
+                    <p style="text-align: center; padding: 20px;">Tidak ada pelanggan ditemukan.</p>
+                @endif
             </div>
+
             <div class="content-reservasi">
                 <div class="header-row" style="text-align: center">
                     <h2 class="col-no">No</h2>
@@ -73,7 +74,7 @@
 
                                 <div class="col-action" style="display: flex; justify-content: center; gap: 10px;">
                                     <!-- Tombol Edit -->
-                                    <form action="{{ route('admin.pelanggan.update', $item->id) }}" method="POST"
+                                    {{-- <form action="{{ route('admin.pelanggan.update', $item->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         @method('PUT')
@@ -86,7 +87,7 @@
                                             onclick="openEditModal('{{ $item->id }}', '{{ $item->nama }}', '{{ $item->email }}', '{{ $item->telepon }}')">
                                             <i class="fas fa-pen" style="color: gray;"></i>
                                         </button>
-                                    </form>
+                                    </form> --}}
 
                                     <!-- Tombol Hapus -->
                                     <form action="{{ route('admin.pelanggan.destroy', $item->id) }}" method="POST"

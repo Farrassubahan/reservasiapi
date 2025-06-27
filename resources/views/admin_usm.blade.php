@@ -91,11 +91,21 @@
 
                             <label for="email">Email</label>
                             <input type="email" id="email" name="email" required>
+                            @error('email')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
                             <label for="telepon">Telepon</label>
                             <input type="number" id="telepon" name="telepon" required>
 
                             <label for="password">Password</label>
+                            @error('password')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            <small style="font-size: 0.8rem; color: gray;">
+                                *Minimal 6 karakter, wajib huruf besar, kecil, angka, dan simbol.
+                            </small>
+
                             <div style="position: relative; width: 100%;">
                                 <input type="password" id="password" name="password" required
                                     style="width: 100%; padding-right: 40px;">
@@ -237,64 +247,71 @@
                 </script>
 
 
-                {{-- script Edit data --}}
                 <script>
-                    const editModal = document.getElementById("editModal");
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const editModal = document.getElementById("editModal");
 
-                    document.querySelectorAll('.btn-edit').forEach(button => {
-                        button.addEventListener('click', async function(e) {
+                        // Tombol edit (loop semua tombol)
+                        document.querySelectorAll('.btn-edit').forEach(button => {
+                            button.addEventListener('click', async function(e) {
+                                e.preventDefault();
+                                const id = this.getAttribute('data-id');
+
+                                try {
+                                    const res = await fetch(`/admin/user-management/${id}`);
+                                    if (!res.ok) throw new Error("Gagal mengambil data pengguna.");
+
+                                    const user = await res.json();
+
+                                    // Isi form
+                                    document.getElementById('edit_id').value = user.id;
+                                    document.getElementById('edit_nama').value = user.nama;
+                                    document.getElementById('edit_email').value = user.email;
+                                    document.getElementById('edit_telepon').value = user.telepon;
+                                    document.getElementById('edit_role').value = user.role;
+
+                                    // Tampilkan modal
+                                    editModal.style.display = "block";
+                                } catch (error) {
+                                    Swal.fire('Error', error.message, 'error');
+                                }
+                            });
+                        });
+
+                        // Tombol tutup modal
+                        window.tutupEditForm = function() {
+                            editModal.style.display = "none";
+                            document.getElementById("menuEditForm").reset();
+                        }
+
+                        // Form submit update
+                        document.getElementById("menuEditForm").addEventListener("submit", async function(e) {
                             e.preventDefault();
-                            const id = this.getAttribute('data-id');
+                            const id = document.getElementById("edit_id").value;
+                            const formData = new FormData(this);
 
                             try {
-                                const res = await fetch(`/admin/user-management/${id}`);
-                                if (!res.ok) throw new Error("Gagal mengambil data pengguna.");
-                                const user = await res.json();
+                                const response = await fetch(`/admin/user-management/update/${id}`, {
+                                    method: "POST",
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json'
+                                    },
+                                    body: formData
+                                });
 
-                                document.getElementById('edit_id').value = user.id;
-                                document.getElementById('edit_nama').value = user.nama;
-                                document.getElementById('edit_email').value = user.email;
-                                document.getElementById('edit_telepon').value = user.telepon;
-                                document.getElementById('edit_role').value = user.role;
+                                const result = await response.json();
 
-                                editModal.style.display = "block";
+                                if (response.ok) {
+                                    Swal.fire('Berhasil', result.message || 'Data berhasil diperbarui!', 'success')
+                                        .then(() => window.location.reload());
+                                } else {
+                                    throw new Error(result.message || 'Gagal memperbarui data.');
+                                }
                             } catch (error) {
-                                Swal.fire('Error', error.message, 'error');
+                                Swal.fire('Gagal', error.message, 'error');
                             }
                         });
-                    });
-
-                    function tutupEditForm() {
-                        editModal.style.display = "none";
-                        document.getElementById("menuEditForm").reset();
-                    }
-
-                    document.getElementById("menuEditForm").addEventListener("submit", async function(e) {
-                        e.preventDefault();
-                        const id = document.getElementById("edit_id").value;
-                        const formData = new FormData(this);
-
-                        try {
-                            const response = await fetch(`/admin/user-management/update/${id}`, {
-                                method: "POST",
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Accept': 'application/json'
-                                },
-                                body: formData
-                            });
-
-                            const result = await response.json();
-
-                            if (response.ok) {
-                                Swal.fire('Berhasil', result.message || 'Data berhasil diperbarui!', 'success')
-                                    .then(() => window.location.reload());
-                            } else {
-                                throw new Error(result.message || 'Gagal memperbarui data.');
-                            }
-                        } catch (error) {
-                            Swal.fire('Gagal', error.message, 'error');
-                        }
                     });
                 </script>
 
@@ -316,6 +333,33 @@
                         });
                     });
                 </script>
+
+                @if ($errors->has('email') || $errors->has('telepon') || $errors->has('password'))
+                    <script>
+                        let pesan = "";
+
+                        @error('email')
+                            pesan += "- {{ $message }}<br>";
+                        @enderror
+
+                        @error('telepon')
+                            pesan += "- {{ $message }}<br>";
+                        @enderror
+
+                        @error('password')
+                            pesan += "- {{ $message }}<br>";
+                        @enderror
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validasi Gagal',
+                            html: pesan,
+                            confirmButtonText: 'OK'
+                        });
+
+                        document.getElementById("formModal").style.display = "block";
+                    </script>
+                @endif
 
 
             </div>

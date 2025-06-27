@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Admin</title>
     @vite(['resources/css/koki.css', 'resources/js/app.js'])
-</head> 
+</head>
 
 <body>
     <div class="layout">
@@ -48,9 +48,10 @@
                 @foreach ($menus as $menu)
                     <div class="card-menu" style="text-align: center">
                         <div class="col-gambar">
-                            <img src="{{ $menu->gambar ? asset('storage/' . $menu->gambar) : asset('image/default.jpg') }}"
+                            <img src="{{ $menu->gambar ? asset($menu->gambar) : asset('image/default.jpg') }}"
                                 alt="gambar" class="gambar-seragam">
                         </div>
+
                         <div class="col-name-menu">{{ $menu->nama }}</div>
                         <div class="col-harga">Rp {{ number_format($menu->harga, 0, ',', '.') }}</div>
                         <div class="col-kategori">{{ ucfirst($menu->kategori) }}</div>

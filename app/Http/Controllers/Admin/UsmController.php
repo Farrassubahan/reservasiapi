@@ -11,12 +11,24 @@ class UsmController extends Controller
 {
     public function index()
     {
-        $pengguna = Pengguna::all();
+        $pengguna = Pengguna::where('role', '!=', 'pelanggan')->get();
         return view('admin_usm', compact('pengguna'));
     }
 
+
     public function store(Request $request)
     {
+        $request->validate([
+            'nama' => 'required',
+            'email' => 'required|email|unique:pengguna,email',
+            'telepon' => ['required', 'regex:/^(\+62|62|08)\d{8,11}$/'],
+            'password' => ['required', 'min:6', 'max:16', 'regex:/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@#$%^&!?])[A-Za-z\d@#$%^&!?]{6,16}$/'],
+            'role' => 'required'
+        ], [
+            'telepon.regex' => 'Nomor telepon harus diawali +62 dan memiliki 10-13 digit angka.',
+            'password.regex' => 'Password harus 6–16 karakter dan mengandung huruf besar, huruf kecil, angka, dan simbol (@#$%^&*!?/).',
+        ]);
+
         Pengguna::create([
             'nama' => $request->nama,
             'email' => $request->email,
@@ -31,9 +43,10 @@ class UsmController extends Controller
 
     public function show($id)
     {
-        $pengguna = Pengguna::findOrFail($id);
-        return response()->json($pengguna);
+        $user = Pengguna::findOrFail($id);
+        return response()->json($user);
     }
+
 
 
     public function update(Request $request, $id)
