@@ -11,7 +11,7 @@ class ReservasiController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Reservasi::with('pengguna');
+        $query = Reservasi::with(['pengguna', 'pembayaran']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -31,6 +31,7 @@ class ReservasiController extends Controller
 
         return view('admin_reservasi', compact('reservasi'));
     }
+
 
 
     public function update(Request $request, $id)
