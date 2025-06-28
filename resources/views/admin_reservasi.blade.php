@@ -54,13 +54,13 @@
                 </div>
             </form>
 
-
             <div class="content-reservasi">
                 <div class="header-row">
                     <h2 class="col col-name">Nama Pelanggan</h2>
                     <h2 class="col col-codereservasi">Kode Reservasi</h2>
                     <h2 class="col col-date">Tanggal & Waktu</h2>
                     <h2 class="col col-people">Jumlah Orang</h2>
+                    <h2 class="col col-status">Bukti Transfer</h2>
                     <h2 class="col col-status">Status</h2>
                     <h2 class="col col-action">Aksi</h2>
                 </div>
@@ -70,11 +70,30 @@
                         <div class="col col-name" title="{{ $item->pengguna->nama ?? '-' }}">
                             {{ Str::limit($item->pengguna->nama ?? '-', 30) }}
                         </div>
-                        <div class="col col-codereservasi">{{ $item->kode_reservasi }} </div>
+
+                        <div class="col col-codereservasi">
+                            {{ $item->kode_reservasi }}
+                        </div>
+
                         <div class="col col-date">
                             {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }} {{ $item->waktu }}
                         </div>
-                        <div class="col col-people">{{ $item->jumlah_tamu }} orang</div>
+
+                        <div class="col col-people">
+                            {{ $item->jumlah_tamu }} orang
+                        </div>
+                        <div class="col col-bukti">
+                            @if ($item->pembayaran && $item->pembayaran->bukti)
+                                <img src="{{ $item->pembayaran && $item->pembayaran->bukti ? asset($item->pembayaran->bukti) : asset('image/default.jpg') }}"
+                                    alt="Bukti Pembayaran" width="60" height="60"
+                                    style="cursor: pointer; border-radius: 6px;"
+                                    onclick="openModal('{{ asset($item->pembayaran->bukti) }}')">
+                            @else
+                                <span style="font-size: 12px; color: gray;">Tidak ada bukti</span>
+                            @endif
+                        </div>
+
+
                         <div class="col col-status" style="width: 120px;">
                             <form method="POST" action="{{ route('reservasi.update', $item->id) }}">
                                 @csrf
@@ -95,27 +114,47 @@
                             <div class="dropdown">
                                 <button class="dropdown-toggle">⋮</button>
                                 <div class="dropdown-menu">
-                                    {{-- <form method="POST" action="{{ route('reservasi.update', $item->id) }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="status" value="selesai">
-                                        <button type="submit">Edit</button>
-                                    </form> --}}
-
                                     <form method="POST" action="{{ route('reservasi.destroy', $item->id) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
                                             onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
                                     </form>
-
-                                    {{-- <button>No Meja</button> --}}
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
+
+            <!-- Modal Gambar -->
+            <div id="buktiModal"
+                style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+           background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center;">
+                <span onclick="closeModal()"
+                    style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
+                <img id="modalImage" src="" style="max-width: 90%; max-height: 90%; border-radius: 10px;">
+            </div>
+
+            <script>
+                function openModal(src) {
+                    document.getElementById('modalImage').src = src;
+                    document.getElementById('buktiModal').style.display = 'flex';
+                }
+
+                function closeModal() {
+                    document.getElementById('buktiModal').style.display = 'none';
+                    document.getElementById('modalImage').src = '';
+                }
+
+                document.getElementById('buktiModal').addEventListener('click', function(e) {
+                    if (e.target === this) closeModal();
+                });
+            </script>
+
+
+
+
             <script>
                 document.addEventListener('click', function(e) {
                     const isToggle = e.target.matches('.dropdown-toggle');

@@ -14,4 +14,5 @@ class Pembayaran extends Model
     {
         return $this->belongsTo(Reservasi::class, 'reservasi_id');
     }
+    
 }

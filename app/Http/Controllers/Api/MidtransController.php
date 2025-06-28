@@ -63,7 +63,7 @@ class MidtransController extends Controller
             'reservasi_id' => $request->reservasi_id,
             'metode' => 'qris',
             'gateway' => 'midtrans',
-            'status' => 'dikonfirmasi',
+            'status' => 'menunggu',
             'jumlah' => $total,
         ]);
 
