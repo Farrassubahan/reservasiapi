@@ -19,15 +19,10 @@ class MidtransController extends Controller
             'reservasi_id' => 'required|exists:reservasi,id',
             'name' => 'required|string',
             'email' => 'required|email',
+            'metode' => 'required|in:qris,transfer,cod', // tambahkan metode
         ]);
 
-        // Konfigurasi Midtrans
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
-
-        $orderId = 'ORDER-' . time();
+        $metode = $request->metode;
 
         // Ambil semua pesanan + relasi menu dari reservasi
         $pesanan = Pesanan::with('menu')
@@ -40,7 +35,7 @@ class MidtransController extends Controller
 
         foreach ($pesanan as $item) {
             if (!$item->menu) {
-                continue; // skip kalau menu null
+                continue;
             }
 
             $harga = $item->menu->harga;
@@ -61,11 +56,28 @@ class MidtransController extends Controller
         // Simpan pembayaran ke database
         $pembayaran = Pembayaran::create([
             'reservasi_id' => $request->reservasi_id,
-            'metode' => 'qris',
-            'gateway' => 'midtrans',
+            'metode' => $metode,
+            'gateway' => $metode === 'cod' ? null : 'midtrans',
             'status' => 'menunggu',
             'jumlah' => $total,
         ]);
+
+        // Jika metode COD, tidak perlu Snap Token
+        if ($metode === 'cod') {
+            return response()->json([
+                'message' => 'Pembayaran COD berhasil dicatat.',
+                'data' => $pembayaran,
+            ]);
+        }
+
+        // Proses Snap Midtrans untuk QRIS dan Transfer
+        // Konfigurasi Midtrans
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        $orderId = 'ORDER-' . time();
 
         // Buat parameter Snap
         $params = [
@@ -80,10 +92,15 @@ class MidtransController extends Controller
             ],
         ];
 
+        // Jika metode QRIS saja, limit payment type
+        if ($metode === 'qris') {
+            $params['enabled_payments'] = ['qris'];
+        }
+
         // Ambil Snap Token
         $snapToken = Snap::getSnapToken($params);
 
-        // Simpan order ID dari Midtrans
+        // Simpan order ID Midtrans
         $pembayaran->update([
             'bukti' => $orderId,
         ]);
