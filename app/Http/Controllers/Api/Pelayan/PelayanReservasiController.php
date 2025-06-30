@@ -8,6 +8,7 @@ use App\Models\Meja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notifikasi;
 
 class PelayanReservasiController extends Controller
 {
@@ -187,6 +188,26 @@ class PelayanReservasiController extends Controller
     }
 
 
+    // public function verifikasiKehadiran($reservasiId)
+    // {
+    //     $reservasi = Reservasi::find($reservasiId);
+    //     if (!$reservasi) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Reservasi tidak ditemukan',
+    //         ], 404);
+    //     }
+
+    //     // Update status reservasi jadi "hadir" atau "diterima"
+    //     $reservasi->status = 'diterima'; // atau 'hadir' sesuai kebutuhan
+    //     $reservasi->save();
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Reservasi telah diverifikasi kehadirannya',
+    //     ]);
+    // }
+
     public function verifikasiKehadiran($reservasiId)
     {
         $reservasi = Reservasi::find($reservasiId);
@@ -197,9 +218,21 @@ class PelayanReservasiController extends Controller
             ], 404);
         }
 
-        // Update status reservasi jadi "hadir" atau "diterima"
-        $reservasi->status = 'diterima'; // atau 'hadir' sesuai kebutuhan
-        $reservasi->save();
+        $statusLama = $reservasi->status;
+        $statusBaru = 'diterima';
+
+        if ($statusLama !== $statusBaru) {
+            $reservasi->status = $statusBaru;
+            $reservasi->save();
+
+            // ✅ Buat notifikasi ke user
+            Notifikasi::create([
+                'pengguna_id' => $reservasi->pengguna_id,
+                'judul' => 'Reservasi Dikonfirmasi Saat Hadir',
+                'pesan' => 'Reservasi Anda telah dikonfirmasi saat kedatangan. Selamat menikmati layanan kami!',
+                'dibaca' => false
+            ]);
+        }
 
         return response()->json([
             'status' => true,

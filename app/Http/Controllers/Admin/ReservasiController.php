@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Reservasi;
 use App\Models\Pengguna;
+use App\Models\Reservasi;
+use App\Models\Notifikasi;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ReservasiController extends Controller
 {
@@ -34,6 +35,27 @@ class ReservasiController extends Controller
 
 
 
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'status' => 'required|in:menunggu,diterima,dibatalkan,selesai',
+    //     ]);
+
+    //     $reservasi = Reservasi::findOrFail($id);
+    //     $reservasi->status = $request->status;
+    //     $reservasi->save();
+
+    //     // ✅ Jika status selesai, ubah semua meja yang terkait jadi 'tersedia'
+    //     if ($request->status === 'selesai') {
+    //         foreach ($reservasi->meja as $meja) {
+    //             $meja->status = 'tersedia';
+    //             $meja->save();
+    //         }
+    //     }
+
+    //     return redirect()->back()->with('success', 'Status reservasi diperbarui.');
+    // }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -41,11 +63,24 @@ class ReservasiController extends Controller
         ]);
 
         $reservasi = Reservasi::findOrFail($id);
-        $reservasi->status = $request->status;
-        $reservasi->save();
+        $statusLama = $reservasi->status;
+        $statusBaru = $request->status;
 
-        // ✅ Jika status selesai, ubah semua meja yang terkait jadi 'tersedia'
-        if ($request->status === 'selesai') {
+        if ($statusLama !== $statusBaru) {
+            $reservasi->status = $statusBaru;
+            $reservasi->save();
+
+            // ✅ Buat notifikasi ke user
+            Notifikasi::create([
+                'pengguna_id' => $reservasi->pengguna_id,
+                'judul' => 'Status Reservasi Diperbarui',
+                'pesan' => 'Status reservasi Anda telah berubah dari "' . $statusLama . '" menjadi "' . $statusBaru . '".',
+                'dibaca' => false
+            ]);
+        }
+
+        // ✅ Jika status selesai, ubah semua meja jadi tersedia
+        if ($statusBaru === 'selesai') {
             foreach ($reservasi->meja as $meja) {
                 $meja->status = 'tersedia';
                 $meja->save();
@@ -54,6 +89,7 @@ class ReservasiController extends Controller
 
         return redirect()->back()->with('success', 'Status reservasi diperbarui.');
     }
+
 
 
     public function destroy($id)

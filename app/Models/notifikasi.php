@@ -11,7 +11,7 @@ class Notifikasi extends Model
 
     public function pengguna()
     {
-        return $this->belongsTo(Pengguna::class, 'penggunaz_id');
+        return $this->belongsTo(Pengguna::class, 'pengguna_id');
     }
 }
 
