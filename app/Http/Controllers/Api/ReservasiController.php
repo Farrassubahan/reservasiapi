@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Reservasi;
+use Carbon\Carbon;
+use App\Models\Menu;
 use App\Models\Pesanan;
 use App\Models\Pengguna;
-use App\Models\Menu;
+use App\Models\Reservasi;
+use App\Models\Notifikasi;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 // use Illuminate\Http\Request;
 // use App\Models\Reservasi;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class ReservasiController extends Controller
 {
@@ -73,6 +74,22 @@ class ReservasiController extends Controller
             }
 
             DB::commit();
+
+            // 🔔 Buat Notifikasi Pengingat Kedatangan BARU
+            Notifikasi::create([
+                'pengguna_id' => $user->id,
+                'judul' => 'Pengingat Kedatangan Reservasi',
+                'pesan' => 'Anda memiliki reservasi pada hari ' . \Carbon\Carbon::parse($reservasi->tanggal)->translatedFormat('l, d F Y') . ' untuk sesi ' . str_replace('_', ' ', $reservasi->sesi) . '. Mohon hadir tepat waktu.',
+                'tipe' => 'pengingat_kedatangan',
+                'status' => 'menunggu',
+                'dibaca' => false
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Reservasi berhasil dibuat.',
+                'data' => $reservasi
+            ], 201);
 
             return response()->json([
                 'status' => true,

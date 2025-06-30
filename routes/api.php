@@ -75,6 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
 */
 
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     // Profile
@@ -117,4 +118,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pesanan/{id}/status', [notifController::class, 'updatePesananStatus']);
     Route::get('/notifikasi', [notifController::class, 'getNotifikasi']);
     Route::post('/notifikasi/{id}/dibaca', [notifController::class, 'tandaiDibaca']);
+
+    Route::get('/notifikasi', [notifController::class, 'getNotifikasiByToken']);
+    Route::post('/notifikasi/{id}/baca', [notifController::class, 'tandaiDibaca']);
 });

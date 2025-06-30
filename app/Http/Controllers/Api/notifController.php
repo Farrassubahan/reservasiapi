@@ -75,38 +75,73 @@ class notifController extends Controller
         ]);
     }
 
-    // ✅ Ambil notifikasi milik user (untuk user di aplikasi Ionic)
-    public function getNotifikasi(Request $request)
-    {
-        $userId = $request->user()->id ?? $request->pengguna_id;
+    // // ✅ Ambil notifikasi milik user (untuk user di aplikasi Ionic)
+    // public function getNotifikasi(Request $request)
+    // {
+    //     $userId = $request->user()->id ?? $request->pengguna_id;
 
-        $notifikasi = Notifikasi::where('pengguna_id', $userId)
+    //     $notifikasi = Notifikasi::where('pengguna_id', $userId)
+    //         ->orderBy('created_at', 'desc')
+    //         ->get();
+
+    //     return response()->json($notifikasi);
+    // }
+
+    // ✅ Tandai notifikasi sudah dibaca
+    // public function tandaiDibaca($id)
+    // {
+    //     $notifikasi = Notifikasi::findOrFail($id);
+    //     $notifikasi->update(['dibaca' => true]);
+
+    //     return response()->json(['message' => 'Notifikasi ditandai sebagai dibaca']);
+    // }
+    // public function cekStatusPesananTerbaru(Request $request)
+    // {
+    //     $pengguna_id = $request->query('pengguna_id');
+
+    //     $pesanan = \App\Models\Pesanan::where('pengguna_id', $pengguna_id)
+    //         ->orderBy('updated_at', 'desc')
+    //         ->take(5) // ambil 5 terakhir
+    //         ->get(['id', 'menu_id', 'status', 'updated_at']);
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'data' => $pesanan
+    //     ]);
+    // }
+
+
+// yang baru
+    public function getNotifikasiByToken(Request $request)
+    {
+        $user = $request->user(); // Ambil user dari token
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User tidak ditemukan dari token.'
+            ], 401);
+        }
+
+        $notifikasi = Notifikasi::where('pengguna_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($notifikasi);
+        return response()->json([
+            'status' => true,
+            'data' => $notifikasi
+        ]);
     }
 
-    // ✅ Tandai notifikasi sudah dibaca
     public function tandaiDibaca($id)
     {
         $notifikasi = Notifikasi::findOrFail($id);
+
         $notifikasi->update(['dibaca' => true]);
-
-        return response()->json(['message' => 'Notifikasi ditandai sebagai dibaca']);
-    }
-    public function cekStatusPesananTerbaru(Request $request)
-    {
-        $pengguna_id = $request->query('pengguna_id');
-
-        $pesanan = \App\Models\Pesanan::where('pengguna_id', $pengguna_id)
-            ->orderBy('updated_at', 'desc')
-            ->take(5) // ambil 5 terakhir
-            ->get(['id', 'menu_id', 'status', 'updated_at']);
 
         return response()->json([
             'status' => true,
-            'data' => $pesanan
+            'message' => 'Notifikasi berhasil ditandai sebagai dibaca.'
         ]);
     }
 }
