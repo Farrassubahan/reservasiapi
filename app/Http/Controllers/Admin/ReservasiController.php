@@ -44,8 +44,17 @@ class ReservasiController extends Controller
         $reservasi->status = $request->status;
         $reservasi->save();
 
+        // ✅ Jika status selesai, ubah semua meja yang terkait jadi 'tersedia'
+        if ($request->status === 'selesai') {
+            foreach ($reservasi->meja as $meja) {
+                $meja->status = 'tersedia';
+                $meja->save();
+            }
+        }
+
         return redirect()->back()->with('success', 'Status reservasi diperbarui.');
     }
+
 
     public function destroy($id)
     {

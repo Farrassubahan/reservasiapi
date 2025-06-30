@@ -5,25 +5,27 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\notifController;
 use App\Http\Controllers\Api\HistoriController;
 use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\ReservasiController;
+use App\Http\Controllers\Api\MidtransController;
 use App\Http\Controllers\Api\Pelayan\mejaPelayan;
+use App\Http\Controllers\Api\ReservasiController;
+use App\Http\Controllers\Pelayan\PesananController;
 use App\Http\Controllers\Api\Pelayan\HistoryPelayan;
+// use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\RatingPegawaiController;
 use App\Http\Controllers\Api\Pelayan\KehadiranReservasi;
 use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
-use App\Http\Controllers\Api\MidtransController;
-// use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Api\RatingPegawaiController;
-use App\Http\Controllers\Api\notifController;
-use App\Http\Controllers\Pelayan\PesananController;
-
+// meja dari controller admin
+use App\Http\Controllers\Admin\MejaController;
 
 
 Route::get('/reservasi/sesi-tersedia', [ReservasiController::class, 'getSesiTersedia']);
 
 Route::post('/rating-pegawai', [RatingPegawaiController::class, 'store']);
+Route::get('/reset-meja', [MejaController::class, 'resetStatus']);
 
 
 Route::middleware('throttle:10,1')->group(function () {
