@@ -44,7 +44,6 @@ class ReservasiController extends Controller
             }
 
             $kodeReservasi = strtoupper(Str::random(8));
-
             $reservasi = Reservasi::create([
                 'pengguna_id' => $user->id,
                 'kode_reservasi' => $kodeReservasi,

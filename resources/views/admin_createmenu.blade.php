@@ -42,7 +42,7 @@
                     <h2 class="col-harga">Harga</h2>
                     <h2 class="col-kategori">Kategori</h2>
                     <h2 class="col-Deskripsi">Deskripsi</h2>
-                    <h2 class="col-stok">Stok</h2>
+                    <h2 class="col-stok">Status</h2>
                     <h2 class="col-action">Aksi</h2>
                 </div>
                 @foreach ($menus as $menu)
@@ -59,10 +59,10 @@
                         <form class="col-stok" action="{{ route('menu.ubah-stok', $menu->id) }}" method="POST">
                             @csrf
                             @method('PUT')
-                            <select name="tersedia" onchange="this.form.submit()">
-                                <option value="tersedia" {{ $menu->tersedia == 'tersedia' ? 'selected' : '' }}>Tersedia
+                            <select name="status" onchange="this.form.submit()">
+                                <option value="tersedia" {{ $menu->status == 'tersedia' ? 'selected' : '' }}>Tersedia
                                 </option>
-                                <option value="kosong" {{ $menu->tersedia == 'kosong' ? 'selected' : '' }}>Kosong
+                                <option value="kosong" {{ $menu->status == 'kosong' ? 'selected' : '' }}>Kosong
                                 </option>
                             </select>
                         </form>

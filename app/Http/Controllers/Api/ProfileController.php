@@ -11,9 +11,7 @@ use App\Models\Pengguna;
 
 class ProfileController extends Controller
 {
-    /**
-     * Tampilkan profil user yang sedang login
-     */
+
     public function show()
     {
         /** @var \App\Models\Pengguna $user */
@@ -56,7 +54,6 @@ class ProfileController extends Controller
             $image = substr($validated['foto'], strpos($validated['foto'], ',') + 1);
             $image = base64_decode($image);
             $extension = $type[1] ?? 'jpg';
-
             $fileName = md5($user->id . time()) . '.' . $extension;
 
             // Hapus foto lama
