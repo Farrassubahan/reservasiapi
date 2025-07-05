@@ -46,10 +46,8 @@ class MenuController extends Controller
             $validated['gambar'] = 'img/gambar_menu/' . $filename;
         }
 
-        // Tambahkan status default 'tersedia'
-        $validated['tersedia'] = 'tersedia';
+        $validated['status'] = 'tersedia';
 
-        // Simpan ke database
         Menu::create($validated);
 
         // Response sukses
@@ -120,11 +118,11 @@ class MenuController extends Controller
     public function ubahStok(Request $request, $id)
     {
         $request->validate([
-            'tersedia' => 'required|in:tersedia,kosong'
+            'status' => 'required|in:tersedia,kosong'
         ]);
 
         $menu = Menu::findOrFail($id);
-        $menu->tersedia = $request->tersedia;
+        $menu->status = $request->status;
         $menu->save();
 
         return back()->with('success', 'Status stok berhasil diperbarui.');
