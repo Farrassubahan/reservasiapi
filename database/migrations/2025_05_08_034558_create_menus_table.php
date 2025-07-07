@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('harga', 10, 2);
             $table->text('deskripsi')->nullable();
             $table->string('gambar')->nullable();
-            $table->enum('tersedia', ['tersedia', 'kosong'])->default('tersedia');
+            $table->enum('status', ['tersedia', 'kosong'])->default('tersedia');
             // $table->integer('jumlah_terjual')->nullable();
             $table->integer('jumlah_terjual')->default(0)->nullable();
             $table->timestamps();
