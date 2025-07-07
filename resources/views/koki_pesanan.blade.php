@@ -24,10 +24,16 @@
     <div class="main">
         <div class="head">
             <h1>Daftar Pesanan Masuk</h1>
-            <select>
-                <option value="selesai">Selesai</option>
-                <option value="dimasak">Dimasak</option>
-            </select>
+            <form method="GET" action="{{ route('koki.pesanan.filter') }}">
+                <select name="status" onchange="this.form.submit()">
+                    <option value="">-- Semua Status --</option>
+                    <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                    <option value="menunggu" {{ request('status') == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                    <option value="siap" {{ request('status') == 'siap' ? 'selected' : '' }}>Siap</option>
+                    <option value="disajikan" {{ request('status') == 'disajikan' ? 'selected' : '' }}>Disajikan</option>
+                    <option value="dibatalkan" {{ request('status') == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                </select>
+            </form>
         </div>
         <div class="pesanan">
             <table class="table-pesanan">
@@ -44,7 +50,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($pesanan->whereNotIn('status', ['disajikan', 'dibatalkan']) as $item)
+                    @foreach ($pesanan as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->pengguna->nama }}</td>

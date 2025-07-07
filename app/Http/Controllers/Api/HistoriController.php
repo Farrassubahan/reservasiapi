@@ -103,20 +103,22 @@ class HistoriController extends Controller
             'email' => $reservasi->koki->email
         ] : null;
 
-        // Hitung total harga
+        // Hitung total harga dan tampilkan snapshot data menu
         foreach ($reservasi->pesanan as $index => $pesanan) {
-            $harga = (float) ($pesanan->harga_snapshot ?? optional($pesanan->menu)->harga ?? 0);
+            $harga = (float) ($pesanan->harga_menu ?? 0);
             $jumlah = $pesanan->jumlah ?? 1;
             $totalItem = $harga * $jumlah;
 
             $data['pesanan'][$index]['harga'] = $harga;
             $data['pesanan'][$index]['total_harga_item'] = $totalItem;
 
-            // Isi data menu snapshot
             $data['pesanan'][$index]['menu'] = [
                 'id' => $pesanan->menu_id,
-                'nama' => $pesanan->nama_menu_snapshot ?? optional($pesanan->menu)->nama,
-                'harga' => $harga
+                'nama' => $pesanan->nama_menu ?? '-',
+                'harga' => $harga,
+                'gambar' => $pesanan->gambar_menu
+                    ? url('img/gambar_menu/' . $pesanan->gambar_menu)
+                    : null
             ];
 
             $totalHarga += $totalItem;
