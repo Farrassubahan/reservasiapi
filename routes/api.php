@@ -18,11 +18,9 @@ use App\Http\Controllers\Api\RatingPegawaiController;
 use App\Http\Controllers\Api\Pelayan\KehadiranReservasi;
 use App\Http\Controllers\Api\Pelayan\PelayanReservasiController;
 use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
-use App\Http\Controllers\Api\MidtransController;
+
 // use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Api\RatingPegawaiController;
-use App\Http\Controllers\Api\notifController;
-use App\Http\Controllers\Pelayan\PesananController;
+
 
 
 

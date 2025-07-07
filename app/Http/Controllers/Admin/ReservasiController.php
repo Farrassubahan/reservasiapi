@@ -77,7 +77,7 @@ class ReservasiController extends Controller
                 'pesan' => 'Status reservasi Anda telah berubah dari "' . $statusLama . '" menjadi "' . $statusBaru . '".',
                 'dibaca' => false
             ]);
-        }
+        } 
 
         // ✅ Jika status selesai, ubah semua meja jadi tersedia
         if ($statusBaru === 'selesai') {
