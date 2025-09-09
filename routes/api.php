@@ -27,7 +27,7 @@ use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
 Route::get('/reservasi/sesi-tersedia', [ReservasiController::class, 'getSesiTersedia']);
 Route::post('/rating-pegawai', [RatingPegawaiController::class, 'store']);
 
-
+ 
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
