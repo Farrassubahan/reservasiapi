@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\Pelayan\PemesananLangsungController;
 // use App\Http\Controllers\AuthController;
 
 
-
+   
 
 Route::get('/reservasi/sesi-tersedia', [ReservasiController::class, 'getSesiTersedia']);
 Route::post('/rating-pegawai', [RatingPegawaiController::class, 'store']);
