@@ -82,7 +82,7 @@ class HistoriController extends Controller
         $totalHarga = 0;
         $data = $reservasi->toArray();
 
-        // Tambahkan data pengguna
+        // Tambahkan data pengguna 
         $data['pengguna'] = [
             'id' => $reservasi->pengguna_id,
             'nama' => $reservasi->pengguna->nama ?? null,

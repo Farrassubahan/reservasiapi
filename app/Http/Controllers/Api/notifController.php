@@ -21,7 +21,7 @@ class notifController extends Controller
 
         $statusLama = $reservasi->status;
         $statusBaru = $request->input('status');
-
+ 
         if ($statusLama !== $statusBaru) {
             $reservasi->status = $statusBaru;
             $reservasi->save();

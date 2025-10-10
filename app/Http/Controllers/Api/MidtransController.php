@@ -37,7 +37,7 @@ class MidtransController extends Controller
             if (!$item->menu) {
                 continue;
             }
-
+ 
             $harga = $item->menu->harga;
             $jumlah = $item->jumlah;
             $namaMenu = $item->menu->nama;
