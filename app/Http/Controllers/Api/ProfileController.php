@@ -22,7 +22,7 @@ class ProfileController extends Controller
         }
 
         return response()->json([
-            'data' => [
+            'data' => [ 
                 'nama'    => $user->nama,
                 'email'   => $user->email,
                 'telepon' => $user->telepon,
