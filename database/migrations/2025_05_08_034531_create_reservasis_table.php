@@ -10,7 +10,7 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+    { 
         Schema::create('reservasi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pengguna_id')->constrained('pengguna')->onDelete('cascade');
