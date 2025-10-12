@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Reservasi;
 use App\Models\Pesanan;
-use App\Models\Notifikasi;
+use App\Models\Notifikasi; 
 
 class notifController extends Controller
 {

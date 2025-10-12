@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UsmController;
 use App\Http\Controllers\Admin\MejaController;
-use App\Http\Controllers\Admin\MenuController;   
+use App\Http\Controllers\Admin\MenuController;    
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Koki\DapurController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\LaporanController; 
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\ReservasiController;
 use App\Http\Controllers\Api\ProfileController;

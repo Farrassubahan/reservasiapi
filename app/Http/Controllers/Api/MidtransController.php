@@ -21,7 +21,7 @@ class MidtransController extends Controller
             'email' => 'required|email',
             'metode' => 'required|in:qris,transfer,cod', // tambahkan metode
         ]);
-
+ 
         $metode = $request->metode;
 
         // Ambil semua pesanan + relasi menu dari reservasi
